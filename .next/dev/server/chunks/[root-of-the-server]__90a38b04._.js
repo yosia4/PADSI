@@ -103,9 +103,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$
 ;
 ;
 const COOKIE = process.env.SESSION_COOKIE_NAME || "padsi_session";
+const SESSION_TTL_MS = 2 * 24 * 60 * 60 * 1000; // 2 hari
 async function createSession(userId) {
     const sid = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["randomUUID"])();
-    const exp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 hari
+    const exp = new Date(Date.now() + SESSION_TTL_MS);
+    // hapus sesi lama supaya tidak ada token usang ketika role berubah
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("DELETE FROM sessions WHERE user_id = $1", [
+        userId
+    ]);
     await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("INSERT INTO sessions (session_id, user_id, expires_at) VALUES ($1, $2, $3)", [
         sid,
         userId,
@@ -113,11 +118,12 @@ async function createSession(userId) {
     ]);
     // ✅ Sekarang cookies() harus di-await
     const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["cookies"])();
+    const isProd = ("TURBOPACK compile-time value", "development") === "production";
     cookieStore.set(COOKIE, sid, {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: true,
+        secure: isProd,
         expires: exp
     });
 }
@@ -135,8 +141,9 @@ async function getSessionUser() {
     const cookieStore = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["cookies"])();
     const c = cookieStore.get(COOKIE);
     if (!c?.value) return null;
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_data TEXT");
     const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])(`
-    SELECT u.id, u.email, u.name, u.role
+    SELECT u.id, u.email, u.name, u.role, u.avatar_data
     FROM sessions s
     JOIN users u ON u.id = s.user_id
     WHERE s.session_id = $1
@@ -172,21 +179,90 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/server.js [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db.ts [app-route] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$session$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/session.ts [app-route] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/crypto [external] (crypto, cjs)");
 ;
 ;
 ;
+;
+const attempts = new Map();
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 5;
+function getClientKey(req) {
+    return req.ip || req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+}
+function isBlocked(key) {
+    const info = attempts.get(key);
+    if (!info) return false;
+    if (Date.now() > info.expiresAt) {
+        attempts.delete(key);
+        return false;
+    }
+    return info.count >= RATE_LIMIT_MAX;
+}
+function recordFailedAttempt(key) {
+    const now = Date.now();
+    const info = attempts.get(key);
+    if (!info || now > info.expiresAt) {
+        attempts.set(key, {
+            count: 1,
+            expiresAt: now + RATE_LIMIT_WINDOW_MS
+        });
+    } else {
+        info.count += 1;
+        attempts.set(key, info);
+    }
+}
+function clearAttempts(key) {
+    attempts.delete(key);
+}
+function hashPassword(password) {
+    const salt = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["randomBytes"])(16).toString("hex");
+    const hash = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["scryptSync"])(password, salt, 64).toString("hex");
+    return `${salt}:${hash}`;
+}
+function verifyPassword(plain, stored) {
+    if (!stored.includes(":")) {
+        return plain === stored;
+    }
+    const [salt, originalHash] = stored.split(":");
+    const hashedBuffer = Buffer.from(originalHash, "hex");
+    const derived = (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["scryptSync"])(plain, salt, 64);
+    if (hashedBuffer.length !== derived.length) return false;
+    return (0, __TURBOPACK__imported__module__$5b$externals$5d2f$crypto__$5b$external$5d$__$28$crypto$2c$__cjs$29$__["timingSafeEqual"])(derived, hashedBuffer);
+}
 async function POST(req) {
     const form = await req.formData();
-    const email = String(form.get("email") || "");
+    const rawEmail = String(form.get("email") || "").trim();
+    const email = rawEmail.toLowerCase();
     const password = String(form.get("password") || "");
-    const role = String(form.get("role") || "").toUpperCase();
-    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id, email, name, role, password FROM users WHERE email=$1", [
+    const clientKey = getClientKey(req);
+    if (!rawEmail) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/login?error=email_empty", req.url));
+    }
+    if (!password) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/login?error=password_empty", req.url));
+    }
+    if (isBlocked(clientKey)) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/login?error=rate", req.url));
+    }
+    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id, email, name, role, password FROM users WHERE LOWER(email)=$1", [
         email
     ]);
     const user = rows[0];
-    if (!user || user.password !== password || user.role != role) {
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/login?error=1", req.url));
+    if (!user || !verifyPassword(password, user.password)) {
+        recordFailedAttempt(clientKey);
+        const err = !user ? "email_invalid" : "password_invalid";
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL(`/login?error=${err}`, req.url));
     }
+    // upgrade hash jika masih plaintext
+    if (!user.password.includes(":")) {
+        const newHash = hashPassword(password);
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("UPDATE users SET password=$1 WHERE id=$2", [
+            newHash,
+            user.id
+        ]);
+    }
+    clearAttempts(clientKey);
     await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$session$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["createSession"])(user.id);
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/dashboard", req.url));
 }

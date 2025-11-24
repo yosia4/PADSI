@@ -2,6 +2,7 @@ import { query } from "@/lib/db";
 import { requireRole } from "@/lib/session";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function EditPelangganPage(props: {
   params: Promise<{ id: string }>;
@@ -11,16 +12,7 @@ export default async function EditPelangganPage(props: {
 
   // 🔐 Cek role user (OWNER / PEGAWAI)
   const can = await requireRole(["OWNER", "PEGAWAI"]);
-  if (!can.ok)
-    return (
-      <div className="p-6">
-        Silakan{" "}
-        <a className="text-blue-600 underline" href="/login">
-          login
-        </a>
-        .
-      </div>
-    );
+  if (!can.ok) redirect("/login");
 
   // ✅ Ambil data pelanggan dari database
   const { rows } = await query("SELECT * FROM customers WHERE id = $1", [id]);
@@ -86,7 +78,7 @@ export default async function EditPelangganPage(props: {
               defaultValue={customer.email || ""}
               className="border border-gray-300 focus:border-[#e31c1c] rounded-lg p-2 focus:outline-none transition"
               type="email"
-            />
+              />
           </div>
 
           {/* Nomor Telepon */}

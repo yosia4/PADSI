@@ -87,16 +87,61 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db.ts [app-route] (ecmascript)");
 ;
 ;
+const expectsJson = (req)=>req.headers.get("x-requested-with") === "fetch";
 async function POST(req) {
     const form = await req.formData();
-    const name = String(form.get("name") || "");
-    const email = form.get("email") ? String(form.get("email")) : null;
-    const phone = form.get("phone") ? String(form.get("phone")) : null;
-    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("INSERT INTO customers (name,email,phone) VALUES ($1,$2,$3)", [
+    const name = String(form.get("name") || "").trim();
+    const email = form.get("email") ? String(form.get("email")).trim() || null : null;
+    const phone = form.get("phone") ? String(form.get("phone")).trim() || null : null;
+    if (!name) {
+        const message = "Nama pelanggan wajib diisi.";
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: message
+            }, {
+                status: 400
+            });
+        }
+        const redirectUrl = new URL("/pelanggan?error=name_required", req.url);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+    }
+    if (email && !email.includes("@")) {
+        const message = "Alamat email harus valid.";
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                error: message
+            }, {
+                status: 400
+            });
+        }
+        const redirectUrl = new URL("/pelanggan?error=email_invalid", req.url);
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+    }
+    if (phone) {
+        const { rows: dup } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id FROM customers WHERE phone = $1 LIMIT 1", [
+            phone
+        ]);
+        if (dup.length > 0) {
+            const message = "Nomor telepon sudah terdaftar.";
+            if (expectsJson(req)) {
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                    error: message
+                }, {
+                    status: 400
+                });
+            }
+            const redirectUrl = new URL("/pelanggan?error=phone_taken", req.url);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+        }
+    }
+    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("INSERT INTO customers (name,email,phone) VALUES ($1,$2,$3) RETURNING *", [
         name,
         email,
         phone
     ]);
+    if (expectsJson(req)) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows[0]);
+    }
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/pelanggan", req.url));
 }
 async function GET() {

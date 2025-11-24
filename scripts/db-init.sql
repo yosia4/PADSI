@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('OWNER','PEGAWAI'))
+  role TEXT NOT NULL CHECK (role IN ('OWNER','PEGAWAI')),
+  avatar_data TEXT
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS menus (
   name TEXT NOT NULL,
   price INTEGER NOT NULL,
   is_active BOOLEAN NOT NULL DEFAULT true,
+  rating INTEGER NOT NULL DEFAULT 4,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

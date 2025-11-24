@@ -85,29 +85,43 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db.ts [app-route] (ecmascript)");
 ;
 ;
-async function POST(request, props) {
-    const { id } = await props.params; // ✅ harus di-await di Next.js 16
-    const formData = await request.formData();
-    const method = formData.get("_method");
-    // Jika method adalah DELETE
+const expectsJson = (req)=>req.headers.get("x-requested-with") === "fetch";
+async function POST(req, props) {
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("ALTER TABLE menus ADD COLUMN IF NOT EXISTS rating INTEGER NOT NULL DEFAULT 4");
+    const { id } = await props.params;
+    const formData = await req.formData();
+    const method = String(formData.get("_method") || "").toUpperCase();
     if (method === "DELETE") {
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("DELETE FROM menus WHERE id = $1", [
             id
         ]);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/menu", request.url));
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true
+            });
+        }
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/menu", req.url));
     }
-    // Jika method adalah PUT (update data)
     if (method === "PUT") {
-        const name = formData.get("name");
-        const price = Number(formData.get("price"));
-        const image_url = formData.get("image_url");
-        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("UPDATE menus SET name = $1, price = $2, image_url = $3 WHERE id = $4", [
+        const name = String(formData.get("name") || "").trim();
+        const price = Number(formData.get("price") || 0);
+        const image_url = formData.get("image_url") || null;
+        const ratingRaw = formData.get("rating");
+        let rating = ratingRaw ? Number(ratingRaw) : 4;
+        if (!Number.isFinite(rating) || rating < 1 || rating > 5) rating = 4;
+        await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("UPDATE menus SET name = $1, price = $2, image_url = $3, rating = $4 WHERE id = $5", [
             name,
             price,
             image_url,
+            rating,
             id
         ]);
-        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/menu", request.url));
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true
+            });
+        }
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/menu", req.url));
     }
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
         error: "Metode tidak didukung"

@@ -85,29 +85,80 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db.ts [app-route] (ecmascript)");
 ;
 ;
-async function POST(req, { params } // ✅ params sekarang Promise
-) {
-    const { id } = await params; // ✅ harus di-await dulu
+const expectsJson = (req)=>req.headers.get("x-requested-with") === "fetch";
+async function POST(req, { params }) {
+    const { id } = await params;
     const form = await req.formData();
     const method = String(form.get("_method") || "").toUpperCase();
     if (method === "DELETE") {
-        // 🗑️ Hapus pelanggan
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("DELETE FROM customers WHERE id=$1", [
             id
         ]);
-    } else if (method === "PUT") {
-        // ✏️ Edit pelanggan
-        const name = form.get("name");
-        const email = form.get("email");
-        const phone = form.get("phone");
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true
+            });
+        }
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/pelanggan", req.url));
+    }
+    if (method === "PUT") {
+        const name = String(form.get("name") || "").trim();
+        const email = form.get("email") ? String(form.get("email")).trim() || null : null;
+        const phone = form.get("phone") ? String(form.get("phone")).trim() || null : null;
+        if (!name) {
+            const message = "Nama pelanggan wajib diisi.";
+            if (expectsJson(req)) {
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                    error: message
+                }, {
+                    status: 400
+                });
+            }
+            const redirectUrl = new URL(`/pelanggan/edit/${id}?error=name_required`, req.url);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+        }
+        if (email && !email.includes("@")) {
+            const message = "Alamat email harus valid.";
+            if (expectsJson(req)) {
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                    error: message
+                }, {
+                    status: 400
+                });
+            }
+            const redirectUrl = new URL(`/pelanggan/edit/${id}?error=email_invalid`, req.url);
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+        }
+        if (phone) {
+            const { rows: dup } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id FROM customers WHERE phone = $1 AND id <> $2 LIMIT 1", [
+                phone,
+                id
+            ]);
+            if (dup.length > 0) {
+                const message = "Nomor telepon sudah terdaftar.";
+                if (expectsJson(req)) {
+                    return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                        error: message
+                    }, {
+                        status: 400
+                    });
+                }
+                const redirectUrl = new URL(`/pelanggan/edit/${id}?error=phone_taken`, req.url);
+                return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(redirectUrl);
+            }
+        }
         await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("UPDATE customers SET name=$1, email=$2, phone=$3 WHERE id=$4", [
             name,
             email,
             phone,
             id
         ]);
+        if (expectsJson(req)) {
+            return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
+                success: true
+            });
+        }
     }
-    // 🔁 Redirect ke halaman pelanggan
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/pelanggan", req.url));
 }
 }),

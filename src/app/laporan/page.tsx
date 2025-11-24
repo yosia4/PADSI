@@ -1,22 +1,14 @@
 import Shell from "@/components/Shell";
 import { requireRole } from "@/lib/session";
 import { query } from "@/lib/db";
-import LaporanClient from "@/components/LaporanClient"; // 👈 komponen client
+import { redirect } from "next/navigation";
+import LaporanClient from "@/components/LaporanClient"; 
 
 export const dynamic = "force-dynamic";
 
 export default async function LaporanPage() {
   const can = await requireRole(["OWNER"]);
-  if (!can.ok)
-    return (
-      <div className="p-6">
-        Silakan{" "}
-        <a href="/login" className="text-blue-600 underline">
-          login
-        </a>
-        .
-      </div>
-    );
+  if (!can.ok) redirect("/login");
 
   // 🔹 Query data dari database (server side)
   const { rows: pelanggan } = await query("SELECT COUNT(*)::int AS total FROM customers");

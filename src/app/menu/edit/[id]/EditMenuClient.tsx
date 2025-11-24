@@ -60,6 +60,21 @@ export default function EditMenuClient({ menu }: { menu?: any }) {
             />
           </div>
 
+          {/* Rating */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Rating
+            </label>
+            <select
+              name="rating"
+              defaultValue={menu.rating ?? 4}
+              className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#e31c1c]"
+            >
+              <option value={5}>5/5</option>
+              <option value={4}>4/5</option>
+            </select>
+          </div>
+
           {/* URL Gambar */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">

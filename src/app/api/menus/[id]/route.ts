@@ -1,32 +1,45 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
 
+const expectsJson = (req: NextRequest) =>
+  req.headers.get("x-requested-with") === "fetch";
+
 export async function POST(
-  request: Request,
+  req: NextRequest,
   props: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await props.params; // ✅ harus di-await di Next.js 16
-  const formData = await request.formData();
-  const method = formData.get("_method");
+  await query(
+    "ALTER TABLE menus ADD COLUMN IF NOT EXISTS rating INTEGER NOT NULL DEFAULT 4"
+  );
+  const { id } = await props.params;
+  const formData = await req.formData();
+  const method = String(formData.get("_method") || "").toUpperCase();
 
-  // Jika method adalah DELETE
   if (method === "DELETE") {
     await query("DELETE FROM menus WHERE id = $1", [id]);
-    return NextResponse.redirect(new URL("/menu", request.url));
+    if (expectsJson(req)) {
+      return NextResponse.json({ success: true });
+    }
+    return NextResponse.redirect(new URL("/menu", req.url));
   }
 
-  // Jika method adalah PUT (update data)
   if (method === "PUT") {
-    const name = formData.get("name") as string;
-    const price = Number(formData.get("price"));
-    const image_url = formData.get("image_url") as string;
+    const name = String(formData.get("name") || "").trim();
+    const price = Number(formData.get("price") || 0);
+    const image_url = (formData.get("image_url") as string | null) || null;
+    const ratingRaw = formData.get("rating");
+    let rating = ratingRaw ? Number(ratingRaw) : 4;
+    if (!Number.isFinite(rating) || rating < 1 || rating > 5) rating = 4;
 
     await query(
-      "UPDATE menus SET name = $1, price = $2, image_url = $3 WHERE id = $4",
-      [name, price, image_url, id]
+      "UPDATE menus SET name = $1, price = $2, image_url = $3, rating = $4 WHERE id = $5",
+      [name, price, image_url, rating, id]
     );
 
-    return NextResponse.redirect(new URL("/menu", request.url));
+    if (expectsJson(req)) {
+      return NextResponse.json({ success: true });
+    }
+    return NextResponse.redirect(new URL("/menu", req.url));
   }
 
   return NextResponse.json({ error: "Metode tidak didukung" }, { status: 400 });

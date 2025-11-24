@@ -1,5 +1,12 @@
 require('dotenv').config();
 const { Pool } = require('pg');
+const { randomBytes, scryptSync } = require('crypto');
+
+function hashPassword(password) {
+  const salt = randomBytes(16).toString('hex');
+  const hash = scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
 
 const customers = Array.from({length:10}, (_,i)=>({name:`Pelanggan ${i+1}`, email:`c${i+1}@mail.com`, phone:`0812-0000-00${(i+1).toString().padStart(2,'0')}`}));
 const menus = [
@@ -9,8 +16,14 @@ const menus = [
 
 async function main() {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
-  await pool.query("INSERT INTO users (name,email,password,role) VALUES ($1,$2,$3,'OWNER') ON CONFLICT DO NOTHING", ["Owner", "owner@padsi.com", "owner123"]);
-  await pool.query("INSERT INTO users (name,email,password,role) VALUES ($1,$2,$3,'PEGAWAI') ON CONFLICT DO NOTHING", ["Pegawai", "pegawai@padsi.com", "pegawai123"]);
+  await pool.query(
+    "INSERT INTO users (name,email,password,role) VALUES ($1,$2,$3,'OWNER') ON CONFLICT (email) DO NOTHING",
+    ["Owner", "owner@padsi.com", hashPassword("owner123")]
+  );
+  await pool.query(
+    "INSERT INTO users (name,email,password,role) VALUES ($1,$2,$3,'PEGAWAI') ON CONFLICT (email) DO NOTHING",
+    ["Pegawai", "pegawai@padsi.com", hashPassword("pegawai123")]
+  );
 
   for (const c of customers) {
     await pool.query("INSERT INTO customers (name,email,phone) VALUES ($1,$2,$3) ON CONFLICT DO NOTHING", [c.name,c.email,c.phone]);
