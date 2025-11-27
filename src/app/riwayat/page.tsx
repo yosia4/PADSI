@@ -5,6 +5,7 @@ import VisitsImportForm from "@/components/VisitsImportForm";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import VisitDeleteButton from "@/components/VisitDeleteButton";
+import { ensureVisitsImportedAtColumn } from "@/lib/schema";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function RiwayatPage(props: {
   const sp = await searchParams; // �o. Next.js 16: harus di-await
   const can = await requireRole(["OWNER", "PEGAWAI"]);
   if (!can.ok) redirect("/login");
+  await ensureVisitsImportedAtColumn();
 
   // �o. Ambil kata kunci dari URL (?q=...)
   const keyword = sp?.q ? `%${sp.q}%` : "%%";
@@ -114,6 +116,7 @@ export default async function RiwayatPage(props: {
             <thead>
               <tr>
                 <th className="text-left">Tanggal</th>
+                <th className="text-left">Diimpor</th>
                 <th className="text-left">Pelanggan</th>
                 <th className="text-right">Belanja</th>
                 <th className="text-right">Poin</th>
@@ -123,40 +126,80 @@ export default async function RiwayatPage(props: {
               </tr>
             </thead>
             <tbody>
-              {visits.map((v: any) => (
-                <tr key={v.id}>
-                  <td className="font-semibold text-gray-900 dark:text-gray-100">
-                    {new Date(v.visited_at).toLocaleDateString("id-ID", {
+              {visits.map((v: any) => {
+                const visitedDate = new Date(v.visited_at);
+                const importedDate = v.imported_at ? new Date(v.imported_at) : null;
+                const visitedDateText = visitedDate.toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                });
+                const visitedTimeText = visitedDate.toLocaleTimeString("id-ID", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                });
+                const importedDateText = importedDate
+                  ? importedDate.toLocaleDateString("id-ID", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
-                    })}
-                  </td>
-                  <td>
-                    <div className="font-semibold text-gray-900 dark:text-gray-100">
-                      {v.customer_name}
-                    </div>
-                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
-                      #{v.id.toString().padStart(4, "0")}
-                    </p>
-                  </td>
-                  <td className="text-right font-semibold text-rose-600 dark:text-rose-300">
-                    Rp {Number(v.total_spend || 0).toLocaleString("id-ID")}
-                  </td>
-                  <td className="text-right">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-600 animate-badge dark:bg-rose-500/20 dark:text-rose-200">
-                      +{v.earned_pts} pts
-                    </span>
-                  </td>
-                  <td className="sticky right-0 bg-white/90 text-center dark:bg-black/40">
-                    <VisitDeleteButton visitId={v.id} />
-                  </td>
-                </tr>
-              ))}
+                    })
+                  : "-";
+                const importedTimeText = importedDate
+                  ? importedDate.toLocaleTimeString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "";
+
+                return (
+                  <tr key={v.id}>
+                    <td className="font-semibold text-gray-900 dark:text-gray-100">
+                      <div>{visitedDateText}</div>
+                      <p className="mt-0.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+                        Pukul {visitedTimeText} WIB
+                      </p>
+                    </td>
+                    <td className="text-gray-700 dark:text-gray-200">
+                      {importedDate ? (
+                        <>
+                          <div className="font-medium">{importedDateText}</div>
+                          <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                            Jam {importedTimeText} WIB
+                          </p>
+                        </>
+                      ) : (
+                        <span className="text-xs text-gray-400 dark:text-gray-500">
+                          Belum tercatat
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      <div className="font-semibold text-gray-900 dark:text-gray-100">
+                        {v.customer_name}
+                      </div>
+                      <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                        #{v.id.toString().padStart(4, "0")}
+                      </p>
+                    </td>
+                    <td className="text-right font-semibold text-rose-600 dark:text-rose-300">
+                      Rp {Number(v.total_spend || 0).toLocaleString("id-ID")}
+                    </td>
+                    <td className="text-right">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-600 animate-badge dark:bg-rose-500/20 dark:text-rose-200">
+                        +{v.earned_pts} pts
+                      </span>
+                    </td>
+                    <td className="sticky right-0 bg-white/90 text-center dark:bg-black/40">
+                      <VisitDeleteButton visitId={v.id} />
+                    </td>
+                  </tr>
+                );
+              })}
 
               {visits.length === 0 && (
                 <tr>
-                  <td className="p-4 text-center text-gray-500 dark:text-gray-400" colSpan={5}>
+                  <td className="p-4 text-center text-gray-500 dark:text-gray-400" colSpan={6}>
                     Belum ada riwayat kunjungan.
                   </td>
                 </tr>

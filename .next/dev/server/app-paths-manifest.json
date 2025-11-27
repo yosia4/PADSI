@@ -1,10 +1,13 @@
 {
+  "/api/customers/points/route": "app/api/customers/points/route.js",
   "/api/login/route": "app/api/login/route.js",
-  "/api/rewards/route": "app/api/rewards/route.js",
+  "/api/logout/route": "app/api/logout/route.js",
+  "/api/visits/[id]/route": "app/api/visits/[id]/route.js",
+  "/api/visits/impor/route": "app/api/visits/impor/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/laporan/page": "app/laporan/page.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/pelanggan/page": "app/pelanggan/page.js",
-  "/reward/page": "app/reward/page.js"
+  "/reward/page": "app/reward/page.js",
+  "/riwayat/page": "app/riwayat/page.js"
 }

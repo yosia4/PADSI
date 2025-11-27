@@ -33,14 +33,30 @@ export default function VisitsImportForm() {
         headers: { "x-requested-with": "fetch" },
       });
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Impor gagal, periksa format berkas.");
+      const responseText = await res.text();
+      let payload: any = null;
+      if (responseText) {
+        try {
+          payload = JSON.parse(responseText);
+        } catch {
+          // abaikan jika bukan JSON
+        }
       }
+
+      if (!res.ok) {
+        throw new Error(payload?.error || "Impor gagal, periksa format berkas.");
+      }
+
+      const imported = Number(payload?.imported ?? 0);
+      const skipped = Number(payload?.skipped ?? 0);
+      let successMessage =
+        imported > 0
+          ? `Berhasil mengimpor ${imported} baris kunjungan${skipped > 0 ? ` (${skipped} dilewati)` : ""}.`
+          : "Riwayat berhasil diimpor. Silakan refresh data untuk melihat perubahan.";
 
       setStatus({
         type: "success",
-        message: "Riwayat berhasil diimpor. Silakan refresh data untuk melihat perubahan.",
+        message: successMessage,
       });
       form.reset();
     } catch (err: any) {
@@ -75,7 +91,11 @@ export default function VisitsImportForm() {
 
       <div className="flex items-center gap-2 rounded-lg bg-rose-50 dark:bg-rose-500/20 px-3 py-2 text-xs text-rose-600 dark:text-rose-200">
         <Info size={14} />
-        Contoh kolom: <code className="font-semibold text-rose-700 dark:text-rose-100">nama_pelanggan, nomor_telepon, tanggal_transaksi, total_transaksi, poin_didapat</code>
+        Contoh kolom:{" "}
+        <code className="font-semibold text-rose-700 dark:text-rose-100">
+          nama_pelanggan, email_pelanggan, nomor_telepon, tanggal_transaksi,
+          total_transaksi, poin_didapat
+        </code>
       </div>
 
       {status && (
