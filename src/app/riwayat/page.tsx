@@ -64,25 +64,27 @@ export default async function RiwayatPage(props: {
 
   return (
     <Shell>
-      <h1 className="text-xl font-semibold mb-4">Riwayat Kunjungan</h1>
+      <h1 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        Riwayat Kunjungan
+      </h1>
 
       {/* dY"? Bar atas: Import + Cari */}
-      <div className="flex flex-wrap gap-3 items-center mb-4">
+      <div className="flex flex-wrap gap-3 items-center mb-4 text-gray-800 dark:text-gray-100">
         {/* dY"� Form Impor File dari POS */}
         <VisitsImportForm />
 
         {/* dY"? Form Pencarian (tetap) */}
-        <form method="get" className="flex gap-2">
+        <form method="get" className="flex gap-2 text-sm">
           <input
             type="text"
             name="q"
             placeholder="Cari nama pelanggan..."
             defaultValue={sp?.q || ""}
-            className="border rounded p-2 w-64 text-sm"
+            className="w-64 rounded border border-gray-200 bg-white p-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-rose-500/40 dark:focus:ring-rose-500/20"
           />
           <button
             type="submit"
-            className="bg-blue-600 text-white px-3 rounded hover:bg-blue-700 text-sm"
+            className="rounded bg-blue-600 px-3 text-sm font-semibold text-white transition hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-400"
           >
             Cari
           </button>
@@ -90,8 +92,8 @@ export default async function RiwayatPage(props: {
       </div>
 
       {/* dY_ Tabel Riwayat (TIDAK diubah strukturnya) */}
-      <div className="rounded-2xl bg-gradient-to-br from-white to-rose-50 shadow-lg border border-white/60 glow-panel animate-pop">
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-white/70 bg-white/60 backdrop-blur">
+      <div className="rounded-2xl border border-white/60 bg-gradient-to-br from-white to-rose-50 shadow-lg transition-colors dark:border-white/10 dark:from-[#101010] dark:to-[#181818] dark:shadow-black/60 glow-panel animate-pop">
+        <div className="flex items-center gap-3 border-b border-white/70 bg-white/60 px-6 py-4 backdrop-blur dark:border-white/10 dark:bg-white/5">
           <img
             src="/logo-jj.png"
             alt="Logo JJ"
@@ -99,10 +101,10 @@ export default async function RiwayatPage(props: {
             loading="lazy"
           />
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-rose-500">
+            <p className="text-xs font-semibold uppercase tracking-widest text-rose-500 dark:text-rose-200">
               SMJJ
             </p>
-            <h3 className="text-lg font-bold text-gray-900">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               Riwayat Kunjungan
             </h3>
           </div>
@@ -123,7 +125,7 @@ export default async function RiwayatPage(props: {
             <tbody>
               {visits.map((v: any) => (
                 <tr key={v.id}>
-                  <td className="font-semibold text-gray-900">
+                  <td className="font-semibold text-gray-900 dark:text-gray-100">
                     {new Date(v.visited_at).toLocaleDateString("id-ID", {
                       day: "2-digit",
                       month: "short",
@@ -131,22 +133,22 @@ export default async function RiwayatPage(props: {
                     })}
                   </td>
                   <td>
-                    <div className="font-semibold text-gray-900">
+                    <div className="font-semibold text-gray-900 dark:text-gray-100">
                       {v.customer_name}
                     </div>
-                    <p className="text-xs text-gray-500 mt-0.5">
+                    <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
                       #{v.id.toString().padStart(4, "0")}
                     </p>
                   </td>
-                  <td className="text-right font-semibold text-rose-600">
+                  <td className="text-right font-semibold text-rose-600 dark:text-rose-300">
                     Rp {Number(v.total_spend || 0).toLocaleString("id-ID")}
                   </td>
                   <td className="text-right">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-600 animate-badge">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-600 animate-badge dark:bg-rose-500/20 dark:text-rose-200">
                       +{v.earned_pts} pts
                     </span>
                   </td>
-                  <td className="sticky right-0 bg-white/90 text-center">
+                  <td className="sticky right-0 bg-white/90 text-center dark:bg-black/40">
                     <VisitDeleteButton visitId={v.id} />
                   </td>
                 </tr>
@@ -154,7 +156,7 @@ export default async function RiwayatPage(props: {
 
               {visits.length === 0 && (
                 <tr>
-                  <td className="p-4 text-center text-gray-500" colSpan={5}>
+                  <td className="p-4 text-center text-gray-500 dark:text-gray-400" colSpan={5}>
                     Belum ada riwayat kunjungan.
                   </td>
                 </tr>
@@ -163,7 +165,7 @@ export default async function RiwayatPage(props: {
           </table>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-white/80 px-6 py-4 text-sm text-gray-600 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-white/80 px-6 py-4 text-sm text-gray-600 sm:flex-row sm:items-center sm:justify-between dark:border-white/10 dark:text-gray-300">
           <p>
             Menampilkan {startEntry}&ndash;{endEntry} dari {totalVisits} kunjungan
           </p>
@@ -171,27 +173,27 @@ export default async function RiwayatPage(props: {
             {page > 1 ? (
               <Link
                 href={buildHref(page - 1)}
-                className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-100"
+                className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-white/20 dark:text-gray-200 dark:hover:bg-white/10"
               >
                 &lsaquo; Sebelumnya
               </Link>
             ) : (
-              <span className="rounded-full border border-gray-100 px-3 py-1 text-xs font-semibold text-gray-400">
+              <span className="rounded-full border border-gray-100 px-3 py-1 text-xs font-semibold text-gray-400 dark:border-white/10 dark:text-gray-500">
                 &lsaquo; Sebelumnya
               </span>
             )}
-            <span className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700">
+            <span className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 dark:border-white/20 dark:text-gray-200">
               Halaman {page} dari {totalPages}
             </span>
             {page < totalPages ? (
               <Link
                 href={buildHref(page + 1)}
-                className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 hover:bg-gray-100"
+                className="rounded-full border border-gray-200 px-3 py-1 text-xs font-semibold text-gray-700 transition hover:bg-gray-100 dark:border-white/20 dark:text-gray-200 dark:hover:bg-white/10"
               >
                 Selanjutnya &rsaquo;
               </Link>
             ) : (
-              <span className="rounded-full border border-gray-100 px-3 py-1 text-xs font-semibold text-gray-400">
+              <span className="rounded-full border border-gray-100 px-3 py-1 text-xs font-semibold text-gray-400 dark:border-white/10 dark:text-gray-500">
                 Selanjutnya &rsaquo;
               </span>
             )}

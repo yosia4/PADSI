@@ -15,10 +15,10 @@ export default async function LaporanPage() {
   const { rows: kunjungan } = await query("SELECT COUNT(*)::int AS total FROM visits");
   const { rows: penjualan } = await query("SELECT COALESCE(SUM(total_spend),0)::int AS total FROM visits");
   const { rows: favorit } = await query(`
-  SELECT m.name, COUNT(v.id) AS total
+  SELECT m.name, m.image_url, COUNT(v.id) AS total
   FROM visits v
   JOIN menus m ON m.id = v.menu_id
-  GROUP BY m.name
+  GROUP BY m.name, m.image_url
   ORDER BY total DESC
   LIMIT 1
 `);
@@ -38,6 +38,7 @@ export default async function LaporanPage() {
           kunjungan: kunjungan[0]?.total || 0,
           penjualan: penjualan[0]?.total || 0,
           favorit: favorit[0]?.name || "-",
+          favoritImage: favorit[0]?.image_url || null,
           grafik,
         }}
       />

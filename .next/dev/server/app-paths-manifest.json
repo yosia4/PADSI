@@ -1,12 +1,10 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
   "/api/login/route": "app/api/login/route.js",
-  "/api/menus/[id]/route": "app/api/menus/[id]/route.js",
+  "/api/rewards/route": "app/api/rewards/route.js",
   "/dashboard/page": "app/dashboard/page.js",
   "/laporan/page": "app/laporan/page.js",
   "/login/page": "app/login/page.js",
-  "/menu/edit/[id]/page": "app/menu/edit/[id]/page.js",
-  "/menu/page": "app/menu/page.js",
   "/page": "app/page.js",
-  "/riwayat/page": "app/riwayat/page.js"
+  "/pelanggan/page": "app/pelanggan/page.js",
+  "/reward/page": "app/reward/page.js"
 }

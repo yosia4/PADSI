@@ -51,31 +51,39 @@ export default function VisitsImportForm() {
   }
 
   return (
-    <div className="flex flex-col gap-2 bg-white px-3 py-2 rounded-lg shadow border border-gray-200">
+    <div className="flex flex-col gap-2 bg-white dark:bg-gray-900 dark:text-gray-100 px-3 py-2 rounded-lg shadow border border-gray-200 dark:border-gray-700">
       <form onSubmit={handleSubmit} className="flex flex-wrap items-center gap-2">
-        <label className="text-sm text-gray-700 font-medium">
+        <label className="text-sm text-gray-700 dark:text-gray-200 font-medium">
           Impor riwayat (CSV/JSON)
         </label>
-        <input type="file" name="file" accept=".csv,.json" required className="text-xs" />
+        <input
+          type="file"
+          name="file"
+          accept=".csv,.json"
+          required
+          className="text-xs text-gray-800 dark:text-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded"
+        />
         <button
           type="submit"
           disabled={isUploading}
-          className="flex items-center gap-1 bg-[#e31c1c] text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 transition disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex items-center gap-1 bg-[#e31c1c] dark:bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 dark:hover:bg-red-500 transition disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Upload size={14} />
           {isUploading ? "Mengunggah..." : "Impor"}
         </button>
       </form>
 
-      <div className="flex items-center gap-2 rounded-lg bg-rose-50 px-3 py-2 text-xs text-rose-600">
+      <div className="flex items-center gap-2 rounded-lg bg-rose-50 dark:bg-rose-500/20 px-3 py-2 text-xs text-rose-600 dark:text-rose-200">
         <Info size={14} />
-        Contoh kolom: <code className="font-semibold">nama_pelanggan, nomor_telepon, tanggal_transaksi, total_transaksi, poin_didapat</code>
+        Contoh kolom: <code className="font-semibold text-rose-700 dark:text-rose-100">nama_pelanggan, nomor_telepon, tanggal_transaksi, total_transaksi, poin_didapat</code>
       </div>
 
       {status && (
         <p
           className={`text-xs ${
-            status.type === "success" ? "text-emerald-600" : "text-rose-600"
+            status.type === "success"
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-rose-600 dark:text-rose-400"
           }`}
         >
           {status.message}

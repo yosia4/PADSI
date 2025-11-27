@@ -2,7 +2,7 @@
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Users,
   Clock,
@@ -21,7 +21,16 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export default function LaporanClient({ data }: any) {
+type LaporanData = {
+  pelanggan: number;
+  kunjungan: number;
+  penjualan: number;
+  favorit: string;
+  favoritImage?: string | null;
+  grafik: Array<{ bulan: string; total: number }>;
+};
+
+export default function LaporanClient({ data }: { data: LaporanData }) {
   const [isPrinting, setIsPrinting] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -30,16 +39,61 @@ export default function LaporanClient({ data }: any) {
     const doc = new jsPDF();
     doc.text(" Laporan Keuangan & Aktivitas Jambar Jabu", 14, 15);
     doc.text(`Tanggal: ${new Date().toLocaleDateString("id-ID")}`, 14, 25);
+    const currency = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+    });
+    const avgSpend =
+      data.kunjungan > 0 ? Math.round(data.penjualan / data.kunjungan) : 0;
+    const bestMonth = data.grafik.reduce(
+      (best, item) => {
+        if (!best || item.total > best.total) return item;
+        return best;
+      },
+      data.grafik[0] || null
+    );
 
     autoTable(doc, {
       head: [["Kategori", "Nilai"]],
       body: [
         ["Total Pelanggan", data.pelanggan.toString()],
         ["Total Kunjungan", data.kunjungan.toString()],
-        ["Total Penjualan (Rp)", data.penjualan.toLocaleString("id-ID")],
+        ["Total Penjualan", currency.format(data.penjualan)],
         ["Menu Terfavorit", data.favorit],
+        ["Rerata Belanja per Kunjungan", currency.format(avgSpend)],
       ],
       startY: 35,
+    });
+
+    let nextY = (doc as any).lastAutoTable.finalY + 12;
+    doc.setFontSize(12);
+    doc.text("Highlight Insight", 14, nextY);
+    doc.setFontSize(10);
+    doc.text(
+      `- Bulan terlaris: ${
+        bestMonth ? `${bestMonth.bulan} (${currency.format(bestMonth.total)})` : "-"
+      }`,
+      14,
+      nextY + 7
+    );
+    doc.text(
+      `- Menu favorit bulan ini: ${data.favorit || "-"}${
+        data.favoritImage ? " (tersedia foto di dashboard)" : ""
+      }`,
+      14,
+      nextY + 14
+    );
+
+    const monthlyRows =
+      data.grafik.length > 0
+        ? data.grafik.map((row) => [row.bulan, currency.format(row.total)])
+        : [["-", "-"]];
+
+    autoTable(doc, {
+      head: [["Bulan", "Total Penjualan"]],
+      body: monthlyRows,
+      startY: nextY + 22,
     });
 
     doc.save("laporan.pdf");
@@ -147,7 +201,13 @@ export default function LaporanClient({ data }: any) {
             value={`Rp ${data.penjualan.toLocaleString("id-ID")}`}
             accent="emerald"
           />
-          <Card icon={<Trophy size={26} />} title="Menu Terfavorit" value={data.favorit} accent="amber" />
+          <Card
+            icon={<Trophy size={26} />}
+            title="Menu Terfavorit"
+            value={data.favorit}
+            accent="amber"
+            imageSrc={data.favoritImage}
+          />
         </div>
 
         <div className="rounded-3xl border border-white/80 bg-white p-6 shadow-2xl shadow-rose-100">
@@ -195,7 +255,15 @@ export default function LaporanClient({ data }: any) {
   );
 }
 
-function Card({ icon, title, value, accent }: any) {
+type CardProps = {
+  icon: ReactNode;
+  title: string;
+  value: string | number;
+  accent: string;
+  imageSrc?: string | null;
+};
+
+function Card({ icon, title, value, accent, imageSrc }: CardProps) {
   const accentStyles: Record<
     string,
     { ring: string; border: string; text: string; iconBg: string }
@@ -235,16 +303,28 @@ function Card({ icon, title, value, accent }: any) {
       <div
         className={`absolute inset-0 bg-gradient-to-br ${accentStyle.ring} opacity-0 transition group-hover:opacity-100`}
       />
-      <div className="relative flex flex-col gap-4">
-        <div className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-white ${accentStyle.iconBg}`}>
+      <div className="relative flex flex-col gap-5">
+        <div className={`inline-flex w-fit items-center justify-center rounded-2xl px-4 py-2 text-white shadow ${accentStyle.iconBg}`}>
           {icon}
         </div>
-        <div className="space-y-2">
-          <p className={`text-[11px] font-semibold uppercase tracking-[0.25em] ${accentStyle.text}`}>
+        <div className="space-y-1.5">
+          <p className={`text-[11px] font-semibold uppercase tracking-[0.3em] ${accentStyle.text}`}>
             {title}
           </p>
-          <p className="text-2xl font-bold text-slate-900">{value}</p>
+          <p className="text-3xl font-bold text-slate-900 leading-tight">
+            {typeof value === "number" ? value.toLocaleString("id-ID") : value}
+          </p>
         </div>
+        {imageSrc && (
+          <div className="overflow-hidden rounded-2xl border border-slate-100 bg-slate-50/70">
+            <img
+              src={imageSrc}
+              alt={`Foto ${title}`}
+              className="h-32 w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
