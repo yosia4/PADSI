@@ -109,7 +109,8 @@ async function POST(req, { params }) {
             const message = "Nama pelanggan wajib diisi.";
             if (expectsJson(req)) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    error: message
+                    error: message,
+                    field: "name"
                 }, {
                     status: 400
                 });
@@ -121,7 +122,8 @@ async function POST(req, { params }) {
             const message = "Alamat email harus valid.";
             if (expectsJson(req)) {
                 return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                    error: message
+                    error: message,
+                    field: "email"
                 }, {
                     status: 400
                 });
@@ -138,7 +140,8 @@ async function POST(req, { params }) {
                 const message = "Nomor telepon sudah terdaftar.";
                 if (expectsJson(req)) {
                     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
-                        error: message
+                        error: message,
+                        field: "phone"
                     }, {
                         status: 400
                     });

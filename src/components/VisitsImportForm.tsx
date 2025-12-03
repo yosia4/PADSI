@@ -5,7 +5,11 @@ import { Upload, Info } from "lucide-react";
 
 type Status = { type: "success" | "error"; message: string } | null;
 
-export default function VisitsImportForm() {
+export default function VisitsImportForm({
+  onImported,
+}: {
+  onImported?: () => void;
+}) {
   const [status, setStatus] = useState<Status>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -59,6 +63,7 @@ export default function VisitsImportForm() {
         message: successMessage,
       });
       form.reset();
+      if (onImported) onImported();
     } catch (err: any) {
       setStatus({ type: "error", message: err.message || "Terjadi kesalahan." });
     } finally {
@@ -82,7 +87,7 @@ export default function VisitsImportForm() {
         <button
           type="submit"
           disabled={isUploading}
-          className="flex items-center gap-1 bg-[#e31c1c] dark:bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 dark:hover:bg-red-500 transition disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex items-center gap-1 bg-[#e31c1c] dark:bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 dark:hover:bg-red-500 transition disabled:cursor-not-allowed disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-400"
         >
           <Upload size={14} />
           {isUploading ? "Mengunggah..." : "Impor"}

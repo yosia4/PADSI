@@ -11,6 +11,7 @@ const errorMessages: Record<string, string> = {
   password_empty: "Password wajib diisi.",
   password_invalid: "Password tidak sesuai.",
   rate: "Terlalu banyak percobaan. Coba lagi beberapa menit.",
+  auth_required: "Sesi Anda sudah berakhir. Silakan login kembali untuk melanjutkan.",
 };
 
 type LookupResult = {
@@ -27,10 +28,13 @@ export default function LoginPage() {
   const [lookupLoading, setLookupLoading] = useState(false);
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const year = useMemo(() => new Date().getFullYear(), []);
   const searchParams = useSearchParams();
   const errorKey = searchParams.get("error");
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
+  const isEmailError = errorKey === "email_empty" || errorKey === "email_invalid";
+  const isPasswordError = errorKey === "password_empty" || errorKey === "password_invalid";
 
   async function handlePointLookup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -123,6 +127,7 @@ export default function LoginPage() {
             <form
               action="/api/login"
               method="post"
+              onSubmit={() => setSubmitting(true)}
               className="flex h-full flex-col rounded-[32px] border border-slate-100 bg-white/85 p-6 shadow-[0_18px_55px_rgba(15,23,42,0.12)] backdrop-blur"
             >
               <div className="mb-4 text-center">
@@ -133,10 +138,15 @@ export default function LoginPage() {
                 <p className="mt-2 text-sm text-slate-500">
                   Gunakan kredensial resmi untuk mengakses dasbor operasional
                 </p>
+                {errorKey === "auth_required" && errorMsg && (
+                  <p className="mt-3 text-xs font-semibold text-rose-500">
+                    {errorMsg}
+                  </p>
+                )}
               </div>
 
               <input type="hidden" name="role" value={role} />
-              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Masuk sebagai</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Masuk sebagai</p>
               <div className="mt-2 grid grid-cols-2 gap-3">
                 {[
                   { label: "Owner", value: "OWNER" as const, helper: "Akses penuh" },
@@ -146,7 +156,7 @@ export default function LoginPage() {
                     key={option.value}
                     type="button"
                     onClick={() => setRole(option.value)}
-                    className={`rounded-2xl border px-4 py-3 text-left transition ${
+                    className={`rounded-2xl border px-4 py-3 text-left transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-300 ${
                       role === option.value
                         ? "border-indigo-500 bg-indigo-50 text-indigo-600 shadow-sm"
                         : "border-slate-200 text-slate-500 hover:border-slate-300"
@@ -161,7 +171,11 @@ export default function LoginPage() {
               <label className="mt-4 block text-sm font-medium text-slate-600" htmlFor="email">
                 Email
               </label>
-              <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200">
+              <div
+                className={`mt-2 flex items-center gap-3 rounded-2xl border bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200 ${
+                  isEmailError ? "border-rose-400 bg-rose-50" : "border-slate-200"
+                }`}
+              >
                 <Mail className="h-5 w-5 text-slate-400" />
                 <input
                   id="email"
@@ -171,14 +185,18 @@ export default function LoginPage() {
                   className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
                 />
               </div>
-              {errorKey && (errorKey === "email_empty" || errorKey === "email_invalid") && (
-                <p className="mt-1 text-xs text-rose-500">{errorMsg}</p>
+              {isEmailError && (
+                <p className="mt-1 text-xs font-semibold text-rose-600">{errorMsg}</p>
               )}
 
               <label className="mt-4 block text-sm font-medium text-slate-600" htmlFor="password">
                 Password
               </label>
-              <div className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200">
+              <div
+                className={`mt-2 flex items-center gap-3 rounded-2xl border bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200 ${
+                  isPasswordError ? "border-rose-400 bg-rose-50" : "border-slate-200"
+                }`}
+              >
                 <Lock className="h-5 w-5 text-slate-400" />
                 <input
                   id="password"
@@ -188,8 +206,8 @@ export default function LoginPage() {
                   className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
                 />
               </div>
-              {errorKey && (errorKey === "password_empty" || errorKey === "password_invalid") && (
-                <p className="mt-1 text-xs text-rose-500">{errorMsg}</p>
+              {isPasswordError && (
+                <p className="mt-1 text-xs font-semibold text-rose-600">{errorMsg}</p>
               )}
 
               {errorKey === "rate" && (
@@ -200,9 +218,10 @@ export default function LoginPage() {
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-400 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg shadow-indigo-200 transition hover:translate-y-0.5"
+                disabled={submitting}
+                className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-400 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white shadow-lg shadow-indigo-200 transition hover:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-300"
               >
-                Masuk
+                {submitting ? "Memproses..." : "Masuk"}
               </button>
 
               <div className="mt-6 flex flex-col gap-2 text-center text-xs text-slate-400">

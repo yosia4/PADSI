@@ -150,7 +150,8 @@ export default function ShellClient({
             {mounted && (
               <button
                 onClick={() => setTheme(isDark ? "light" : "dark")}
-                className="flex items-center justify-between gap-2 rounded-2xl bg-gray-900/5 px-3 py-2.5 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-900/10 dark:bg-white/10 dark:text-gray-100 dark:hover:bg-white/20"
+                aria-label={isDark ? "Aktifkan mode terang" : "Aktifkan mode gelap"}
+                className="flex items-center justify-between gap-2 rounded-2xl bg-gray-900/5 px-3 py-2.5 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-900/10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-400 dark:bg-white/10 dark:text-gray-100 dark:hover:bg-white/20"
               >
                 <span className="flex items-center gap-2">
                   {isDark ? <Sun size={16} /> : <Moon size={16} />}
@@ -164,7 +165,7 @@ export default function ShellClient({
             <button
               type="button"
               onClick={handleLogoutClick}
-              className="flex w-full items-center justify-between gap-2 rounded-2xl bg-gradient-to-r from-rose-500 to-orange-500 px-3 py-2.5 text-[11px] font-semibold text-white shadow-lg shadow-rose-200/70 transition hover:shadow-xl dark:shadow-rose-900/40"
+              className="flex w-full items-center justify-between gap-2 rounded-2xl bg-gradient-to-r from-rose-500 to-orange-500 px-3 py-2.5 text-[11px] font-semibold text-white shadow-lg shadow-rose-200/70 transition hover:shadow-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-rose-400 dark:shadow-rose-900/40"
             >
               <span className="flex items-center gap-2">
                 <LogOut size={16} />

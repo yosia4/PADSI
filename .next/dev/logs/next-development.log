@@ -1,59 +1,1105 @@
-[00:00:01.127] Server  LOG      ✓ Ready in 838ms
-[00:01:51.782] Server  LOG      ○ Compiling / ...
-[00:01:56.139] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:21:51.905] Server  LOG      ○ Compiling /dashboard ...
-[00:21:55.296] Server  WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:00:01.954] Server  LOG      ✓ Ready in 1435ms
+[00:00:08.425] Server  LOG      ○ Compiling / ...
+[00:00:14.555] Server  WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:00:17.323] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:17.547] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:00:34.758] Server  LOG      ○ Compiling /dashboard ...
+[00:00:39.321] Server  ERROR    ⨯ ReferenceError: Sparkles is not defined
+[00:00:39.612] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:40.220] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:00:40.220] Browser ERROR   SMJJ error boundary: {}
+[00:01:07.620] Server  LOG      ✓ Compiled in 461ms
+[00:02:15.342] Server  WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:02:16.789] Server  WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:21:55.764] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:21:57.452] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:17.146] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:17.308] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:02:17.482] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:21:57.453] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:17.482] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:26:44.314] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:25.982] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:26:44.314] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:25.982] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:31:19.264] Server  LOG      ✓ Compiled in 373ms
-[00:32:21.740] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:26.483] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:32:21.740] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:26.483] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[00:36:45.522] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:42:06.858] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:45:25.642] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:49:01.895] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:49:50.449] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:50:51.300] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:58:42.470] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:01:55.307] Server  LOG      ✓ Compiled in 79ms
-[01:03:17.381] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:04:40.906] Server  LOG      ✓ Compiled in 439ms
-[01:05:56.827] Server  WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:46.508] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:46.642] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:02:53.601] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:53.751] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:02:56.343] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[01:05:57.054] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:05:57.196] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:56.343] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[01:05:57.196] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+[00:02:56.811] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
        please check the style of container, or the props width(100%) and height(100%),
        or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
        height and width.
-[01:07:59.185] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:08:23.699] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:56.811] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[00:05:26.460] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.465] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.470] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.476] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.481] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.485] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.488] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:26.491] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.180] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.184] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.186] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.189] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.192] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.195] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.198] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:29.200] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.857] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.859] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.863] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.866] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.871] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.874] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.877] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.881] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:31.887] Server  LOG      ✓ Compiled in 5.6s
+[00:05:32.671] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:40.268] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:43.037] Server  LOG      ○ Compiling /_error ...
+[00:05:44.683] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:44.683] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:47.990] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:47.994] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:47.997] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.002] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.054] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.057] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.062] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.067] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/pelanggan/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.072] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.079] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.083] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.086] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.140] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.142] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.145] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.148] Server  ERROR    ⨯ ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:05:48.177] Server  LOG      ✓ Compiled in 393ms
+[00:05:48.683] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:48.683] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:48.683] Browser ERROR   ./src/components/ShellClient.tsx:24:1
+Export useBrand doesn't exist in target module
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+  23 | import BrandSettingsModal from "./BrandSettingsModal";
+> 24 | import { useBrand } from "./ThemeProvider";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  25 |
+  26 | export default function ShellClient({
+  27 |   user,
+
+The export useBrand was not found in module [project]/src/components/ThemeProvider.tsx [app-client] (ecmascript).
+Did you mean to import default?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+[00:05:48.683] Browser ERROR   ./src/components/ShellClient.tsx:24:1
+Export useBrand doesn't exist in target module
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+  23 | import BrandSettingsModal from "./BrandSettingsModal";
+> 24 | import { useBrand } from "./ThemeProvider";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  25 |
+  26 | export default function ShellClient({
+  27 |   user,
+
+The export useBrand was not found in module [project]/src/components/ThemeProvider.tsx [app-ssr] (ecmascript).
+Did you mean to import default?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+[00:05:54.704] Browser ERROR   ./src/components/ShellClient.tsx:23:1
+Module not found: Can't resolve './BrandSettingsModal'
+  21 | import ToastProvider from "./ToastProvider";
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+> 23 | import BrandSettingsModal from "./BrandSettingsModal";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { useBrand } from "./ThemeProvider";
+  25 |
+  26 | export default function ShellClient({
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+[00:05:54.704] Browser ERROR   ./src/components/ShellClient.tsx:24:1
+Export useBrand doesn't exist in target module
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+  23 | import BrandSettingsModal from "./BrandSettingsModal";
+> 24 | import { useBrand } from "./ThemeProvider";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  25 |
+  26 | export default function ShellClient({
+  27 |   user,
+
+The export useBrand was not found in module [project]/src/components/ThemeProvider.tsx [app-client] (ecmascript).
+Did you mean to import default?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+[00:05:54.704] Browser ERROR   ./src/components/ShellClient.tsx:24:1
+Export useBrand doesn't exist in target module
+  22 | import ProfileSettingsModal from "./ProfileSettingsModal";
+  23 | import BrandSettingsModal from "./BrandSettingsModal";
+> 24 | import { useBrand } from "./ThemeProvider";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  25 |
+  26 | export default function ShellClient({
+  27 |   user,
+
+The export useBrand was not found in module [project]/src/components/ThemeProvider.tsx [app-ssr] (ecmascript).
+Did you mean to import default?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./src/components/ShellClient.tsx
+    ./src/components/Shell.tsx
+    ./src/app/dashboard/page.tsx
+[00:07:09.054] Server  LOG      ✓ Compiled in 3.4s
+[00:07:09.700] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./src/components/ThemeProvider.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[00:07:09.911] Server  WARN    useViewportScroll is deprecated. Convert to useScroll().
+[00:07:17.245] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:18.835] Browser WARN    useViewportScroll is deprecated. Convert to useScroll().

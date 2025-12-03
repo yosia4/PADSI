@@ -17,7 +17,7 @@ export default async function PelangganPage() {
   return (
     <Shell>
       <h1 className="text-xl font-semibold mb-4">Pelanggan</h1>
-      <PelangganTable customers={customers} />
+      <PelangganTable initialCustomers={customers} />
     </Shell>
   );
 }

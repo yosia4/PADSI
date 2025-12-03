@@ -62,9 +62,17 @@ export async function POST(req: NextRequest) {
   return NextResponse.redirect(new URL("/pelanggan", req.url));
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
+  const keyword = q ? `%${q}%` : "%%";
   const { rows } = await query(
-    "SELECT * FROM customers ORDER BY created_at DESC"
+    `
+    SELECT *
+    FROM customers
+    WHERE name ILIKE $1 OR COALESCE(email,'') ILIKE $1 OR COALESCE(phone,'') ILIKE $1
+    ORDER BY created_at DESC
+  `,
+    [keyword]
   );
   return NextResponse.json(rows);
 }

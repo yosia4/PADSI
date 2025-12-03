@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Edit, Gift, Trash2 } from "lucide-react";
 import AppDialog from "@/components/AppDialog";
 import { useToast } from "@/components/ToastProvider";
+import useSWR from "swr";
+import { jsonFetcher } from "@/lib/fetcher";
 
 type Status = { type: "success" | "error"; message: string } | null;
 
-export default function PelangganTable({ customers }: { customers: any[] }) {
+export default function PelangganTable({ initialCustomers }: { initialCustomers: any[] }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [list, setList] = useState(customers);
   const [status, setStatus] = useState<Status>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [busyId, setBusyId] = useState<number | null>(null);
@@ -18,6 +19,12 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
   const showToast = useToast();
   const perPage = 10;
   const [formError, setFormError] = useState<{ message: string; field?: string } | null>(null);
+  const queryKey = useMemo(() => `/api/customers?q=${encodeURIComponent(searchTerm)}`, [searchTerm]);
+  const { data, mutate, isLoading } = useSWR(queryKey, jsonFetcher, {
+    fallbackData: initialCustomers,
+    keepPreviousData: true,
+  });
+  const list = data || [];
 
   async function handleAddCustomer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,9 +45,8 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
         setFormError({ message, field: data.field });
         throw new Error(message);
       }
-      const created = await res.json();
       form.reset();
-      setList((prev) => [created, ...prev]);
+      await mutate();
       setStatus({ type: "success", message: "Pelanggan berhasil ditambahkan." });
       showToast({ type: "success", message: "Pelanggan berhasil ditambahkan." });
       setFormError(null);
@@ -65,7 +71,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
         headers: { "x-requested-with": "fetch" },
       });
       if (!res.ok) throw new Error("Gagal menghapus pelanggan.");
-      setList((prev) => prev.filter((c) => c.id !== id));
+      await mutate();
       setStatus({ type: "success", message: "Data pelanggan terhapus." });
       showToast({ type: "success", message: "Data pelanggan terhapus." });
     } catch (err: any) {
@@ -85,12 +91,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
   };
 
   // Filter data pelanggan (nama, email, telepon)
-  const filtered = list.filter(
-    (c) =>
-      c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.phone?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filtered = list;
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / perPage));
@@ -141,7 +142,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="bg-[#e31c1c] text-white rounded px-3 py-2 text-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="bg-[#e31c1c] text-white rounded px-3 py-2 text-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-400"
           >
             {isSubmitting ? "Menyimpan..." : "Tambah"}
           </button>
@@ -246,7 +247,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
                     <a
                       href={`/pelanggan/edit/${c.id}`}
                       title="Edit"
-                      className="inline-flex items-center gap-1 rounded-full bg-blue-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-500"
+                      className="inline-flex items-center gap-1 rounded-full bg-blue-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-blue-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-300"
                     >
                       <Edit size={16} />
                       Edit
@@ -256,7 +257,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
                     <a
                       href={`/reward?customer_id=${c.id}&type=REDEEM`}
                       title="Tukar Reward"
-                      className="inline-flex items-center gap-1 rounded-full bg-amber-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-amber-500"
+                      className="inline-flex items-center gap-1 rounded-full bg-amber-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-amber-500 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-300"
                     >
                       <Gift size={16} />
                       Tukar
@@ -268,7 +269,7 @@ export default function PelangganTable({ customers }: { customers: any[] }) {
                       type="button"
                       title="Hapus"
                       disabled={busyId === c.id}
-                      className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex items-center gap-1 rounded-full bg-red-500/90 px-3 py-1 text-xs font-semibold text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-300"
                     >
                       <Trash2 size={16} />
                       Hapus

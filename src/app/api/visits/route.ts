@@ -12,7 +12,47 @@ export async function POST(req: NextRequest) {
   return NextResponse.redirect(new URL("/riwayat", req.url));
 }
 
-export async function GET() {
-  const { rows } = await query("SELECT * FROM visits ORDER BY visited_at DESC");
-  return NextResponse.json(rows);
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const q = searchParams.get("q")?.trim() ?? "";
+  const pageParam = Number(searchParams.get("page") || "1");
+  const perPageParam = Number(searchParams.get("perPage") || "12");
+  const perPage = Number.isFinite(perPageParam) && perPageParam > 0 ? perPageParam : 12;
+  const page = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
+  const offset = (page - 1) * perPage;
+  const keyword = q ? `%${q}%` : "%%";
+
+  const [visitsResult, countResult] = await Promise.all([
+    query(
+      `
+      SELECT v.*, c.name as customer_name
+      FROM visits v
+      JOIN customers c ON c.id = v.customer_id
+      WHERE c.name ILIKE $1
+      ORDER BY visited_at DESC
+      LIMIT $2 OFFSET $3
+    `,
+      [keyword, perPage, offset]
+    ),
+    query(
+      `
+      SELECT COUNT(*)::int as total
+      FROM visits v
+      JOIN customers c ON c.id = v.customer_id
+      WHERE c.name ILIKE $1
+    `,
+      [keyword]
+    ),
+  ]);
+
+  const total = countResult.rows[0]?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+
+  return NextResponse.json({
+    visits: visitsResult.rows,
+    total,
+    totalPages,
+    page,
+    perPage,
+  });
 }

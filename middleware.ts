@@ -22,6 +22,7 @@ export function middleware(req: NextRequest) {
     if (pathname !== "/login") {
       loginUrl.searchParams.set("next", pathname + search);
     }
+    loginUrl.searchParams.set("error", "auth_required");
     return NextResponse.redirect(loginUrl);
   }
 

@@ -87,21 +87,30 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$serv
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/lib/db.ts [app-route] (ecmascript)");
 ;
 ;
+const expectsJson = (req)=>req.headers.get("x-requested-with") === "fetch";
 async function POST(req) {
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("ALTER TABLE menus ADD COLUMN IF NOT EXISTS rating INTEGER NOT NULL DEFAULT 4");
     const form = await req.formData();
-    const name = String(form.get("name") || "");
+    const name = String(form.get("name") || "").trim();
     const price = Number(form.get("price") || 0);
-    const image_url = String(form.get("image_url") || "");
-    // Simpan menu baru ke database
-    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("INSERT INTO menus (name, price, image_url, is_active) VALUES ($1, $2, $3, true)", [
+    const image_url = form.get("image_url") || null;
+    const ratingRaw = form.get("rating");
+    let rating = ratingRaw ? Number(ratingRaw) : 4;
+    if (!Number.isFinite(rating) || rating < 1 || rating > 5) rating = 4;
+    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("INSERT INTO menus (name, price, image_url, rating, is_active) VALUES ($1, $2, $3, $4, true) RETURNING id, name, price, image_url, rating", [
         name,
         price,
-        image_url
+        image_url,
+        rating
     ]);
+    if (expectsJson(req)) {
+        return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows[0]);
+    }
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].redirect(new URL("/menu", req.url));
 }
 async function GET() {
-    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id, name, price, image_url, created_at FROM menus WHERE is_active = true ORDER BY created_at DESC");
+    await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("ALTER TABLE menus ADD COLUMN IF NOT EXISTS rating INTEGER NOT NULL DEFAULT 4");
+    const { rows } = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["query"])("SELECT id, name, price, image_url, rating, created_at FROM menus WHERE is_active = true ORDER BY created_at DESC");
     return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json(rows);
 }
 }),

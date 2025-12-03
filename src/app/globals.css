@@ -6,6 +6,30 @@ body {
   @apply bg-gray-100 text-gray-900 dark:bg-[#060606] dark:text-gray-100;
 }
 
+#next-dev-overlay,
+#next-dev-overlay *,
+#next-build-watcher,
+#next-build-watcher *,
+#__next-build-watcher,
+#__next-build-watcher * {
+  display: none !important;
+}
+
+.click-particle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 192, 203, 0.65), rgba(227, 28, 28, 0.3));
+  box-shadow: 0 0 12px rgba(227, 28, 28, 0.5);
+  mix-blend-mode: screen;
+  animation: particleBurst 0.9s ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
 @layer components {
   .table-playful {
     border-collapse: separate;
@@ -128,5 +152,16 @@ body {
   }
   50% {
     box-shadow: 0 20px 55px rgba(227, 28, 28, 0.2);
+  }
+}
+
+@keyframes particleBurst {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(var(--scale, 1.2));
+    opacity: 0;
   }
 }
