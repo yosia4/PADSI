@@ -158,9 +158,10 @@ export async function POST(req: NextRequest) {
         "SELECT id, email FROM customers WHERE phone = $1",
         [phone]
       );
-      if (rows[0]) {
-        customerId = rows[0].id;
-        await updateCustomerEmail(customerId, rows[0].email, email);
+      const existing = rows[0] as { id: number; email: string | null } | undefined;
+      if (existing) {
+        customerId = existing.id;
+        await updateCustomerEmail(existing.id, existing.email ?? null, email);
       }
     }
 
@@ -169,9 +170,10 @@ export async function POST(req: NextRequest) {
         "SELECT id, email FROM customers WHERE LOWER(email) = $1",
         [emailNormalized]
       );
-      if (rows[0]) {
-        customerId = rows[0].id;
-        await updateCustomerEmail(customerId, rows[0].email, email);
+      const existing = rows[0] as { id: number; email: string | null } | undefined;
+      if (existing) {
+        customerId = existing.id;
+        await updateCustomerEmail(existing.id, existing.email ?? null, email);
       }
     }
 
@@ -181,9 +183,10 @@ export async function POST(req: NextRequest) {
         "SELECT id, email FROM customers WHERE name = $1",
         [nama]
       );
-      if (rows[0]) {
-        customerId = rows[0].id;
-        await updateCustomerEmail(customerId, rows[0].email, email);
+      const existing = rows[0] as { id: number; email: string | null } | undefined;
+      if (existing) {
+        customerId = existing.id;
+        await updateCustomerEmail(existing.id, existing.email ?? null, email);
       }
     }
 

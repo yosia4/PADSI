@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useSpring, useTransform, useViewportScroll } f
 import { usePathname, useSearchParams } from "next/navigation";
 import { PropsWithChildren, useMemo } from "react";
 
-const transition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] };
+const transition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const };
 
 /**
  * Transisi halaman global dengan efek kaca 3D dan parallax glow.

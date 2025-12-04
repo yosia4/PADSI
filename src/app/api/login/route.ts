@@ -9,10 +9,12 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 5;
 
 function getClientKey(req: NextRequest) {
+  const forwarded = req.headers.get("x-forwarded-for");
+  const realIp = req.headers.get("x-real-ip");
   return (
-    req.ip ||
-    req.headers.get("x-forwarded-for") ||
-    req.headers.get("x-real-ip") ||
+    forwarded?.split(",")[0]?.trim() ||
+    realIp ||
+    req.headers.get("cf-connecting-ip") ||
     "unknown"
   );
 }

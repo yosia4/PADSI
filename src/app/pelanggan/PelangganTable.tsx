@@ -9,7 +9,28 @@ import { jsonFetcher } from "@/lib/fetcher";
 
 type Status = { type: "success" | "error"; message: string } | null;
 
-export default function PelangganTable({ initialCustomers }: { initialCustomers: any[] }) {
+type Customer = {
+  id: number;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  points: number;
+  total_visits: number;
+};
+
+type CustomersResponse =
+  | Customer[]
+  | {
+      length: number;
+      slice: (start: number, end: number) => Customer[];
+      [key: string]: any;
+    };
+
+export default function PelangganTable({
+  initialCustomers,
+}: {
+  initialCustomers: Customer[];
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const [status, setStatus] = useState<Status>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,11 +41,11 @@ export default function PelangganTable({ initialCustomers }: { initialCustomers:
   const perPage = 10;
   const [formError, setFormError] = useState<{ message: string; field?: string } | null>(null);
   const queryKey = useMemo(() => `/api/customers?q=${encodeURIComponent(searchTerm)}`, [searchTerm]);
-  const { data, mutate, isLoading } = useSWR(queryKey, jsonFetcher, {
-    fallbackData: initialCustomers,
+  const { data, mutate, isLoading } = useSWR<CustomersResponse>(queryKey, jsonFetcher, {
+    fallbackData: initialCustomers as CustomersResponse,
     keepPreviousData: true,
   });
-  const list = data || [];
+  const list: Customer[] = Array.isArray(data) ? data : initialCustomers;
 
   async function handleAddCustomer(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

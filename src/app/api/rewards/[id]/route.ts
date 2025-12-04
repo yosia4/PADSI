@@ -3,9 +3,9 @@ import { query } from "@/lib/db";
 
 export async function POST(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
+  const { id } = await params;
   const form = await req.formData();
   const method = String(form.get("_method") || "").toUpperCase();
   if (method === "DELETE") {

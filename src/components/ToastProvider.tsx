@@ -36,7 +36,7 @@ export function useToast() {
 
 const toneStyles: Record<
   ToastType,
-  { wrapper: string; icon: JSX.Element }
+  { wrapper: string; icon: React.ReactNode }
 > = {
   success: {
     wrapper: "border-emerald-200 bg-emerald-50 text-emerald-800",
