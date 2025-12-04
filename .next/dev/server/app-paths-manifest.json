@@ -1,9 +1,7 @@
 {
   "/api/login/route": "app/api/login/route.js",
-  "/api/visits/route": "app/api/visits/route.js",
+  "/api/logout/route": "app/api/logout/route.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/laporan/page": "app/laporan/page.js",
   "/login/page": "app/login/page.js",
-  "/page": "app/page.js",
-  "/riwayat/page": "app/riwayat/page.js"
+  "/page": "app/page.js"
 }

@@ -57,21 +57,46 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/pg [external] (pg, cjs)");
 ;
 let pool = null;
+const RETRYABLE_PG_CODES = new Set([
+    "ETIMEDOUT",
+    "ECONNRESET",
+    "ECONNREFUSED",
+    "57P01",
+    "57P02",
+    "57P03",
+    "08006"
+]);
 function getPool() {
     if (!pool) {
         pool = new __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__cjs$29$__["Pool"]({
             connectionString: process.env.DATABASE_URL,
-            ssl: {
-                rejectUnauthorized: false
-            }
+            ssl: ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : undefined,
+            connectionTimeoutMillis: 10_000,
+            idleTimeoutMillis: 10_000,
+            max: parseInt(process.env.PG_POOL_SIZE || "10", 10),
+            keepAlive: true
         });
     }
     return pool;
 }
 async function query(text, params) {
     const p = getPool();
-    const res = await p.query(text, params);
-    return res;
+    let lastError = null;
+    for(let attempt = 1; attempt <= 4; attempt++){
+        try {
+            const res = await p.query(text, params);
+            return res;
+        } catch (error) {
+            lastError = error;
+            const retryable = RETRYABLE_PG_CODES.has(error?.code) || error?.message?.includes("Connection terminated");
+            if (!retryable || attempt === 3) {
+                error.message = `Database query failed after ${attempt} attempt(s): ${error.message}`;
+                throw error;
+            }
+            await new Promise((resolve)=>setTimeout(resolve, attempt * 400));
+        }
+    }
+    throw lastError;
 }
 }),
 "[externals]/crypto [external] (crypto, cjs)", ((__turbopack_context__, module, exports) => {
@@ -188,7 +213,9 @@ const attempts = new Map();
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 5;
 function getClientKey(req) {
-    return req.ip || req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+    const forwarded = req.headers.get("x-forwarded-for");
+    const realIp = req.headers.get("x-real-ip");
+    return forwarded?.split(",")[0]?.trim() || realIp || req.headers.get("cf-connecting-ip") || "unknown";
 }
 function isBlocked(key) {
     const info = attempts.get(key);

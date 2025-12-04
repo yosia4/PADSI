@@ -57,21 +57,46 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__cjs$29$__ = __turbopack_context__.i("[externals]/pg [external] (pg, cjs)");
 ;
 let pool = null;
+const RETRYABLE_PG_CODES = new Set([
+    "ETIMEDOUT",
+    "ECONNRESET",
+    "ECONNREFUSED",
+    "57P01",
+    "57P02",
+    "57P03",
+    "08006"
+]);
 function getPool() {
     if (!pool) {
         pool = new __TURBOPACK__imported__module__$5b$externals$5d2f$pg__$5b$external$5d$__$28$pg$2c$__cjs$29$__["Pool"]({
             connectionString: process.env.DATABASE_URL,
-            ssl: {
-                rejectUnauthorized: false
-            }
+            ssl: ("TURBOPACK compile-time falsy", 0) ? "TURBOPACK unreachable" : undefined,
+            connectionTimeoutMillis: 10_000,
+            idleTimeoutMillis: 10_000,
+            max: parseInt(process.env.PG_POOL_SIZE || "10", 10),
+            keepAlive: true
         });
     }
     return pool;
 }
 async function query(text, params) {
     const p = getPool();
-    const res = await p.query(text, params);
-    return res;
+    let lastError = null;
+    for(let attempt = 1; attempt <= 4; attempt++){
+        try {
+            const res = await p.query(text, params);
+            return res;
+        } catch (error) {
+            lastError = error;
+            const retryable = RETRYABLE_PG_CODES.has(error?.code) || error?.message?.includes("Connection terminated");
+            if (!retryable || attempt === 3) {
+                error.message = `Database query failed after ${attempt} attempt(s): ${error.message}`;
+                throw error;
+            }
+            await new Promise((resolve)=>setTimeout(resolve, attempt * 400));
+        }
+    }
+    throw lastError;
 }
 }),
 "[project]/src/app/api/customers/route.ts [app-route] (ecmascript)", ((__turbopack_context__) => {
