@@ -28,6 +28,8 @@ type LaporanData = {
   favorit: string;
   favoritImage?: string | null;
   grafik: Array<{ bulan: string; total: number }>;
+  pelangganBulanan: Array<{ bulan: string; total: number }>;
+  redeemBulanan: Array<{ bulan: string; total: number }>;
 };
 
 export default function LaporanClient({ data }: { data: LaporanData }) {
@@ -109,20 +111,47 @@ export default function LaporanClient({ data }: { data: LaporanData }) {
       ["Menu Terfavorit", data.favorit],
     ];
 
-    const grafikRows = [["Bulan", "Total (Rp)"]];
-    data.grafik.forEach((row: any) => {
-      grafikRows.push([row.bulan, row.total]);
+    const currency = new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
     });
 
-    const csvRows = [
+    const buildTable = (title: string, header: string[], rows: Array<[string, string | number]>) => {
+      const tableRows = rows.length > 0 ? rows : [["-", "-"]];
+      return [[title], header, ...tableRows.map(([col1, col2]) => [col1, String(col2)])];
+    };
+
+    const penjualanBulanan = buildTable(
+      "Penjualan per Bulan",
+      ["Bulan", "Total (Rp)"],
+      data.grafik.map((row) => [row.bulan, currency.format(row.total)])
+    );
+
+    const pelangganBulanan = buildTable(
+      "Pertumbuhan Pelanggan",
+      ["Bulan", "Total Pelanggan Baru"],
+      data.pelangganBulanan.map((row) => [row.bulan, row.total])
+    );
+
+    const redeemBulanan = buildTable(
+      "Redeem Poin per Bulan",
+      ["Bulan", "Poin Ditukar"],
+      data.redeemBulanan.map((row) => [row.bulan, row.total])
+    );
+
+    const csvRows: (string | number)[][] = [
       ["Laporan SMJJ"],
-      [`Tanggal`, new Date().toLocaleDateString("id-ID")],
+      ["Tanggal", new Date().toLocaleDateString("id-ID")],
       [],
       ["Ringkasan KPI"],
       ...summaries,
       [],
-      ["Penjualan per Bulan"],
-      ...grafikRows,
+      ...penjualanBulanan,
+      [],
+      ...pelangganBulanan,
+      [],
+      ...redeemBulanan,
       [],
       ["Top Menu Bulan Ini", data.favorit],
     ];

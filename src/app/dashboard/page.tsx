@@ -24,6 +24,8 @@ export default async function DashboardPage() {
     { rows: penjualan },
     { rows: monthlySalesRows },
     { rows: recentVisitsRows },
+    { rows: monthlyCustomersRows },
+    { rows: monthlyRedeemRows },
   ] = await Promise.all([
     query("SELECT COUNT(*)::int AS total FROM customers"),
     query("SELECT COUNT(*)::int AS total FROM visits"),
@@ -49,6 +51,30 @@ export default async function DashboardPage() {
       LIMIT 5
     `
     ),
+    query(
+      `
+      SELECT
+        TO_CHAR(date_trunc('month', created_at), 'Mon') AS label,
+        COUNT(*)::int AS total,
+        date_trunc('month', created_at) AS month_sort
+      FROM customers
+      WHERE created_at >= date_trunc('month', NOW()) - INTERVAL '5 months'
+      GROUP BY label, month_sort
+      ORDER BY month_sort
+    `
+    ),
+    query(
+      `
+      SELECT
+        TO_CHAR(date_trunc('month', created_at), 'Mon') AS label,
+        COALESCE(SUM(CASE WHEN type = 'REDEEM' THEN points ELSE 0 END),0)::int AS total,
+        date_trunc('month', created_at) AS month_sort
+      FROM rewards
+      WHERE created_at >= date_trunc('month', NOW()) - INTERVAL '5 months'
+      GROUP BY label, month_sort
+      ORDER BY month_sort
+    `
+    ),
   ]);
 
   const totalPelanggan = pelanggan[0]?.total || 0;
@@ -59,6 +85,14 @@ export default async function DashboardPage() {
     total: Number(row.total) || 0,
   }));
   const recentVisits = recentVisitsRows;
+  const monthlyCustomers = monthlyCustomersRows.map((row: any) => ({
+    label: row.label,
+    total: Number(row.total) || 0,
+  }));
+  const monthlyRedeemPoints = monthlyRedeemRows.map((row: any) => ({
+    label: row.label,
+    total: Number(row.total) || 0,
+  }));
 
   const metricCards = [
     {
@@ -140,8 +174,14 @@ export default async function DashboardPage() {
                 Total Rp {Number(totalPenjualan).toLocaleString("id-ID")}
               </span>
             </div>
-            <div className="mt-6 h-60 w-full">
-              <MiniSalesChart data={monthlySales} />
+            <p className="mt-3 text-xs text-slate-500">
+              Grafik ini merangkum total omzet per bulan untuk membaca tren penjualan
+              semester terakhir.
+            </p>
+            <div className="mt-6 rounded-2xl border border-rose-100 bg-gradient-to-b from-rose-50/70 to-white p-4">
+              <div className="h-[260px] w-full">
+                <MiniSalesChart data={monthlySales} />
+              </div>
             </div>
           </div>
 
@@ -188,61 +228,70 @@ export default async function DashboardPage() {
           </div>
         </section>
 
-          <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="rounded-3xl border border-white/80 bg-white p-6 shadow-2xl shadow-rose-100 lg:col-span-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-rose-400">
-                    Aktivitas Terbaru
-                  </p>
-                  <h2 className="text-2xl font-semibold text-slate-900">
-                    Progress Operasional
-                  </h2>
-                </div>
-                <a
-                  href="/riwayat"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-rose-500 hover:text-rose-600"
-                >
-                  Detail <ArrowRight size={16} />
-                </a>
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="rounded-3xl border border-white/80 bg-white p-6 shadow-2xl shadow-rose-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-indigo-400">
+                  Pertumbuhan Pelanggan
+                </p>
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  Registrasi 6 Bulan Terakhir
+                </h2>
               </div>
-              <div className="mt-6 space-y-4 text-sm text-slate-600">
-                <p>
-                  • Data transaksi pelanggan terbaru akan dimuat otomatis dari
-                  POS/visit import.
-                </p>
-                <p>• Gunakan menu Riwayat untuk sweeping data dan koreksi.</p>
-                <p>
-                  • Fitur insight lebih lanjut siap dikembangkan sesuai
-                  kebutuhan.
-                </p>
+              <span className="text-xs text-slate-400">
+                Total {totalPelanggan.toLocaleString("id-ID")} pelanggan
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-slate-500">
+              Memperlihatkan jumlah pelanggan baru yang teregistrasi setiap
+              bulan sehingga mudah memantau pertumbuhan basis pelanggan.
+            </p>
+            <div className="mt-6 rounded-2xl border border-indigo-100 bg-gradient-to-b from-indigo-50/60 to-white p-4">
+              <div className="h-56 w-full">
+                <MiniSalesChart
+                  data={monthlyCustomers}
+                  color="#6366f1"
+                  tooltipLabel="Pelanggan"
+                  valueKind="number"
+                  valueSuffix=" pelanggan"
+                />
               </div>
             </div>
-            <div className="rounded-3xl border border-white/80 bg-white p-6 shadow-2xl shadow-rose-100">
-              <p className="text-xs uppercase tracking-[0.35em] text-amber-500">
-                Quick Access
-              </p>
-              <h2 className="mt-2 text-xl font-semibold text-slate-900">
-                Navigasi Cepat
-              </h2>
-              <div className="mt-4 space-y-3 text-sm text-slate-600">
-                {shortcuts.map((item) => (
-                  <a
-                    key={item.label}
-                    href={item.href}
-                    className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white px-4 py-3 transition hover:border-rose-200 hover:bg-rose-50"
-                  >
-                    {item.label}
-                    <ArrowRight size={16} className="text-slate-300" />
-                  </a>
-                ))}
+          </div>
+
+          <div className="rounded-3xl border border-white/80 bg-white p-6 shadow-2xl shadow-rose-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-amber-500">
+                  Redeem Loyalty
+                </p>
+                <h2 className="text-2xl font-semibold text-slate-900">
+                  Poin Ditukar
+                </h2>
               </div>
-              <div className="mt-6 rounded-2xl bg-gradient-to-br from-amber-100 to-rose-50 p-4 text-xs text-amber-700">
-                Tips: pantau menu favorit lewat halaman laporan untuk melihat
-                menu dengan penjualan tertinggi.
+              <span className="text-xs text-slate-400">
+                6 bulan terakhir
+              </span>
+            </div>
+            <p className="mt-3 text-xs text-slate-500">
+              Membantu mengukur penggunaan program loyalitas dengan menampilkan
+              total poin yang ditukar setiap bulan.
+            </p>
+            <div className="mt-6 rounded-2xl border border-amber-100 bg-gradient-to-b from-amber-50/60 to-white p-4">
+              <div className="h-56 w-full">
+                <MiniSalesChart
+                  data={monthlyRedeemPoints}
+                  color="#f97316"
+                  tooltipLabel="Poin Redeem"
+                  valueKind="number"
+                  valueSuffix=" pts"
+                />
               </div>
             </div>
-          </section>
+          </div>
+        </section>
+
         </div>
       </div>
     </Shell>

@@ -1,10 +1,9 @@
 {
-  "/api/customers/[id]/route": "app/api/customers/[id]/route.js",
-  "/api/customers/route": "app/api/customers/route.js",
   "/api/login/route": "app/api/login/route.js",
+  "/api/visits/route": "app/api/visits/route.js",
   "/dashboard/page": "app/dashboard/page.js",
+  "/laporan/page": "app/laporan/page.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js",
-  "/pelanggan/edit/[id]/page": "app/pelanggan/edit/[id]/page.js",
-  "/pelanggan/page": "app/pelanggan/page.js"
+  "/riwayat/page": "app/riwayat/page.js"
 }

@@ -113,6 +113,7 @@ export async function POST(req: NextRequest) {
 
   let importedCount = 0;
   let skippedCount = 0;
+  const pointConversionValue = 2000;
 
   // Proses tiap baris transaksi
   for (const row of records) {
@@ -132,9 +133,16 @@ export async function POST(req: NextRequest) {
     const tanggalRaw =
       row.tanggal_transaksi || row.visited_at || row.tanggal || null;
     const total =
-      Number(row.total_transaksi ?? row.total_spend ?? 0) || 0;
-    const poin =
-      Number(row.poin_didapat ?? row.earned_pts ?? 0) || 0;
+      Number(
+        row.total_transaksi ??
+          row.total_spend ??
+          row.jumlah_transaksi ??
+          0
+      ) || 0;
+    const poin = Math.max(
+      0,
+      Math.floor(total / pointConversionValue)
+    );
 
     if (!nama && !phone && !email) {
       // kalau nggak ada identitas dasar, skip

@@ -9,6 +9,7 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 type RewardSearchParams = {
+  q?: string;
   customer_id?: string;
   type?: string;
   points?: string;

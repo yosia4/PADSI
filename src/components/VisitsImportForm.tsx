@@ -99,7 +99,7 @@ export default function VisitsImportForm({
         Contoh kolom:{" "}
         <code className="font-semibold text-rose-700 dark:text-rose-100">
           nama_pelanggan, email_pelanggan, nomor_telepon, tanggal_transaksi,
-          total_transaksi, poin_didapat
+          total_transaksi
         </code>
       </div>
 

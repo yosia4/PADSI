@@ -36,8 +36,15 @@ export default function RewardPresetCard({
         body: form,
         headers: { "x-requested-with": "fetch" },
       });
-      if (!res.ok) throw new Error("Penukaran gagal. Coba lagi.");
-      setStatus({ type: "success", message: "Penukaran berhasil tersimpan." });
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(payload?.error || "Penukaran gagal. Coba lagi.");
+      }
+      const balanceMessage =
+        typeof payload?.balance === "number"
+          ? `Penukaran berhasil. Sisa poin ${payload.balance.toLocaleString("id-ID")} pts.`
+          : "Penukaran berhasil tersimpan.";
+      setStatus({ type: "success", message: balanceMessage });
     } catch (err: any) {
       setStatus({
         type: "error",

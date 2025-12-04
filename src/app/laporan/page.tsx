@@ -28,6 +28,26 @@ export default async function LaporanPage() {
     GROUP BY bulan
     ORDER BY MIN(visited_at)
   `);
+  const { rows: growth } = await query(`
+    SELECT
+      TO_CHAR(date_trunc('month', created_at), 'Mon') AS bulan,
+      COUNT(*)::int AS total,
+      date_trunc('month', created_at) AS month_sort
+    FROM customers
+    WHERE created_at >= date_trunc('month', NOW()) - INTERVAL '11 months'
+    GROUP BY bulan, month_sort
+    ORDER BY month_sort
+  `);
+  const { rows: redeem } = await query(`
+    SELECT
+      TO_CHAR(date_trunc('month', created_at), 'Mon') AS bulan,
+      COALESCE(SUM(CASE WHEN type = 'REDEEM' THEN points ELSE 0 END),0)::int AS total,
+      date_trunc('month', created_at) AS month_sort
+    FROM rewards
+    WHERE created_at >= date_trunc('month', NOW()) - INTERVAL '11 months'
+    GROUP BY bulan, month_sort
+    ORDER BY month_sort
+  `);
 
   // Kirim hasil ke komponen Client
   return (
@@ -40,6 +60,8 @@ export default async function LaporanPage() {
           favorit: favorit[0]?.name || "-",
           favoritImage: favorit[0]?.image_url || null,
           grafik,
+          pelangganBulanan: growth,
+          redeemBulanan: redeem,
         }}
       />
     </Shell>
