@@ -2,7 +2,8 @@
 
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
+import { motion } from "framer-motion";
 import {
   Users,
   Clock,
@@ -35,6 +36,8 @@ type LaporanData = {
 export default function LaporanClient({ data }: { data: LaporanData }) {
   const [isPrinting, setIsPrinting] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [chartReady, setChartReady] = useState(false);
+  useEffect(() => setChartReady(true), []);
 
   const handleCetak = () => {
     setIsPrinting(true);
@@ -254,29 +257,46 @@ export default function LaporanClient({ data }: { data: LaporanData }) {
             </div>
           </div>
 
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.grafik}>
-                <defs>
-                  <linearGradient id="bar" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor="#fb7185" stopOpacity={0.95} />
-                    <stop offset="100%" stopColor="#f97316" stopOpacity={0.8} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.35)" />
-                <XAxis dataKey="bulan" stroke="#94a3b8" />
-                <YAxis stroke="#94a3b8" />
-                <Tooltip
-                  contentStyle={{
-                    background: "rgba(255,255,255,0.95)",
-                    borderRadius: "12px",
-                    border: "1px solid rgba(148,163,184,0.35)",
-                    color: "#1f2937",
-                  }}
-                />
-                <Bar dataKey="total" fill="url(#bar)" radius={[16, 16, 6, 6]} />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="relative h-72 w-full overflow-hidden rounded-3xl">
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white/5 via-white/40 to-transparent blur-3xl"
+              initial={{ x: "-40%" }}
+              animate={{ x: ["-40%", "140%"] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+            />
+            {chartReady ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={data.grafik}>
+                  <defs>
+                    <linearGradient id="bar" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stopColor="#fb7185" stopOpacity={0.95} />
+                      <stop offset="100%" stopColor="#f97316" stopOpacity={0.8} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.35)" />
+                  <XAxis dataKey="bulan" stroke="#94a3b8" />
+                  <YAxis stroke="#94a3b8" />
+                  <Tooltip
+                    contentStyle={{
+                      background: "rgba(255,255,255,0.95)",
+                      borderRadius: "12px",
+                      border: "1px solid rgba(148,163,184,0.35)",
+                      color: "#1f2937",
+                    }}
+                  />
+                  <Bar
+                    dataKey="total"
+                    fill="url(#bar)"
+                    radius={[16, 16, 6, 6]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex h-full items-center justify-center rounded-2xl bg-white/30 text-sm text-slate-400 dark:bg-white/5">
+                Menyiapkan grafik...
+              </div>
+            )}
           </div>
         </div>
       </div>
