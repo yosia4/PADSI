@@ -31,9 +31,11 @@ export default function LoginPage() {
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [errorKey, setErrorKey] = useState<string | null>(null);
   const year = useMemo(() => new Date().getFullYear(), []);
   const searchParams = useSearchParams();
+  const [errorKey, setErrorKey] = useState<string | null>(
+    searchParams.get("error")
+  );
   useEffect(() => {
     setErrorKey(searchParams.get("error"));
   }, [searchParams]);
