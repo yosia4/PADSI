@@ -178,6 +178,7 @@ export default function LoginPage() {
                     key={option.value}
                     type="button"
                     onClick={() => setRole(option.value)}
+                    data-cy={`role-${option.value.toLowerCase()}`}
                     className={`rounded-2xl border px-4 py-3 text-left transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-300 ${
                       role === option.value
                         ? "border-indigo-500 bg-indigo-50 text-indigo-600 shadow-sm"
