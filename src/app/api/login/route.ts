@@ -80,22 +80,26 @@ export async function POST(req: NextRequest) {
     }
     return url;
   };
+  const redirectToLogin = (error: string) =>
+    NextResponse.redirect(buildRedirect(error), { status: 303 });
 
   if (!rawEmail && !password) {
-    return NextResponse.redirect(buildRedirect("credentials_empty"));
+    return redirectToLogin("credentials_empty");
   }
   if (!rawEmail) {
-    return NextResponse.redirect(buildRedirect("email_empty"));
+    return redirectToLogin("email_empty");
   }
   if (!password) {
-    return NextResponse.redirect(buildRedirect("password_empty"));
+    return redirectToLogin("password_empty");
   }
   if (!role) {
-    return NextResponse.redirect(buildRedirect("role_invalid"));
+    return redirectToLogin("role_invalid");
   }
 
   if (isBlocked(clientKey)) {
-    return NextResponse.redirect(new URL("/login?error=rate", req.url));
+    return NextResponse.redirect(new URL("/login?error=rate", req.url), {
+      status: 303,
+    });
   }
 
   const { rows } = await query(
@@ -106,17 +110,17 @@ export async function POST(req: NextRequest) {
 
   if (!user) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(buildRedirect("email_invalid"));
+    return redirectToLogin("email_invalid");
   }
 
   if (user.role !== role) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(buildRedirect("role_invalid"));
+    return redirectToLogin("role_invalid");
   }
 
   if (!verifyPassword(password, user.password)) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(buildRedirect("password_invalid"));
+    return redirectToLogin("password_invalid");
   }
 
   // upgrade hash jika masih plaintext
