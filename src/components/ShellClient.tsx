@@ -35,7 +35,7 @@ export default function ShellClient({
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [profile, setProfile] = useState(user);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [logoutError, setLogoutError] = useState<string | null>(null);
   useEffect(() => setProfile(user), [user]);
@@ -90,9 +90,8 @@ export default function ShellClient({
       { name: "Reward", href: "/reward", icon: <Gift size={18} /> },
     ],
   };
-  useEffect(() => setSidebarOpen(false), [pathname]);
+  useEffect(() => setSidebarOpen(true), [pathname]);
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
-  const closeSidebar = () => setSidebarOpen(false);
   const handleThemeToggle = () => {
     if (!mounted) return;
     setTheme(isDark ? "light" : "dark");
@@ -119,42 +118,12 @@ export default function ShellClient({
           </div>
         </div>
       )}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-20 bg-black/40 backdrop-blur-sm lg:hidden"
-          onClick={closeSidebar}
-        />
-      )}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-rose-400/25 blur-[140px] dark:bg-rose-500/10" />
         <div className="absolute bottom-[-20%] right-[-10%] h-96 w-96 rounded-full bg-sky-300/25 blur-[160px] dark:bg-sky-500/10" />
       </div>
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-4 px-3 py-4 text-[11px] lg:h-screen lg:w-full lg:max-w-none lg:flex-row lg:overflow-hidden lg:px-6 lg:py-8">
-        <div className="rounded-3xl border border-white/60 bg-white/80 px-4 py-3 text-gray-700 shadow-lg shadow-gray-200/60 dark:border-white/10 dark:bg-white/5 dark:text-white lg:hidden">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-rose-500/80 dark:text-rose-200/80">
-                Navigasi
-              </p>
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                {sidebarOpen ? "Sembunyikan menu" : "Tampilkan menu"}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={toggleSidebar}
-              className="rounded-2xl border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-100 hover:-translate-y-0.5 active:scale-95 dark:border-white/10 dark:bg-white/10 dark:text-white"
-              aria-expanded={sidebarOpen}
-              aria-controls="app-sidebar"
-            >
-              <span className="flex items-center gap-2">
-                {sidebarOpen ? <X size={16} /> : <Menu size={16} />}
-                {sidebarOpen ? "Tutup" : "Menu"}
-              </span>
-            </button>
-          </div>
-        </div>
         <div className="hidden items-center justify-end lg:flex">
           <button
             type="button"
@@ -240,7 +209,6 @@ export default function ShellClient({
                   <Link
                     key={item.name}
                     href={item.href}
-                    onClick={closeSidebar}
                     className={baseClasses}
                   >
                     {content}
@@ -255,7 +223,6 @@ export default function ShellClient({
                   onClick={() => {
                     if (item.disabled) return;
                     item.action?.();
-                    closeSidebar();
                   }}
                   className={`${baseClasses} text-left disabled:cursor-not-allowed disabled:opacity-70`}
                   disabled={item.disabled}
