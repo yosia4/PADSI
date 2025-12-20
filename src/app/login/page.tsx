@@ -3,7 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { BadgeCheck, Layers3, Lock, Mail, Phone, Sparkles, Workflow } from "lucide-react";
+import {
+  AlertTriangle,
+  BadgeCheck,
+  Layers3,
+  Lock,
+  Mail,
+  Phone,
+  Sparkles,
+  Workflow,
+} from "lucide-react";
 
 const errorMessages: Record<string, string> = {
   email_empty: "Email wajib diisi.",
@@ -24,6 +33,22 @@ type LookupResult = {
   total_visits: number;
 };
 
+type FieldErrors = {
+  email?: string;
+  password?: string;
+};
+
+const InlineFieldError = ({ message }: { message: string }) => (
+  <div
+    className="mt-2 flex items-start gap-2 rounded-2xl border border-rose-100 bg-rose-50/90 px-3 py-2 text-xs font-semibold text-rose-600 shadow-[0_8px_30px_rgba(244,63,94,0.15)]"
+    role="alert"
+    aria-live="assertive"
+  >
+    <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+    <span className="leading-snug">{message}</span>
+  </div>
+);
+
 export default function LoginPage() {
   const [role, setRole] = useState<"OWNER" | "PEGAWAI">("PEGAWAI");
   const [lookupPhone, setLookupPhone] = useState("");
@@ -31,6 +56,8 @@ export default function LoginPage() {
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [localErrors, setLocalErrors] = useState<FieldErrors>({});
   const year = useMemo(() => new Date().getFullYear(), []);
   const searchParams = useSearchParams();
   const [errorKey, setErrorKey] = useState<string | null>(
@@ -42,6 +69,9 @@ export default function LoginPage() {
   useEffect(() => {
     setErrorKey(searchParams.get("error"));
     setEmailInput(searchParams.get("email") || "");
+    setPasswordInput("");
+    setLocalErrors({});
+    setSubmitting(false);
   }, [searchParams]);
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const fieldErrorKeys = new Set([
@@ -55,15 +85,57 @@ export default function LoginPage() {
     errorMsg &&
     errorKey &&
     !fieldErrorKeys.has(errorKey as keyof typeof errorMessages);
-  const isEmailError =
-    errorKey === "email_empty" ||
-    errorKey === "email_invalid" ||
-    errorKey === "credentials_empty";
-  const isPasswordError =
-    errorKey === "password_empty" ||
-    errorKey === "password_invalid" ||
-    errorKey === "credentials_empty";
   const isRoleError = errorKey === "role_invalid";
+
+  const serverEmailMessage = (() => {
+    if (!errorKey) return null;
+    switch (errorKey) {
+      case "email_empty":
+      case "credentials_empty":
+        return errorMessages.email_empty;
+      case "email_invalid":
+        return errorMessages.email_invalid;
+      default:
+        return null;
+    }
+  })();
+  const serverPasswordMessage = (() => {
+    if (!errorKey) return null;
+    switch (errorKey) {
+      case "password_empty":
+      case "credentials_empty":
+        return errorMessages.password_empty;
+      case "password_invalid":
+        return errorMessages.password_invalid;
+      default:
+        return null;
+    }
+  })();
+
+  const emailErrorMessage = localErrors.email || serverEmailMessage;
+  const passwordErrorMessage = localErrors.password || serverPasswordMessage;
+  const hasEmailError = Boolean(emailErrorMessage);
+  const hasPasswordError = Boolean(passwordErrorMessage);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const trimmedEmail = emailInput.trim();
+    const trimmedPassword = passwordInput.trim();
+    const nextErrors: FieldErrors = {};
+    if (!trimmedEmail) {
+      nextErrors.email = errorMessages.email_empty;
+    }
+    if (!trimmedPassword) {
+      nextErrors.password = errorMessages.password_empty;
+    }
+    if (nextErrors.email || nextErrors.password) {
+      e.preventDefault();
+      setLocalErrors(nextErrors);
+      setSubmitting(false);
+      return;
+    }
+    setLocalErrors({});
+    setSubmitting(true);
+  }
 
   async function handlePointLookup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -156,7 +228,7 @@ export default function LoginPage() {
             <form
               action="/api/login"
               method="post"
-              onSubmit={() => setSubmitting(true)}
+              onSubmit={handleSubmit}
               className="flex h-full flex-col rounded-[32px] border border-slate-100 bg-white/85 p-6 shadow-[0_18px_55px_rgba(15,23,42,0.12)] backdrop-blur"
             >
               <div className="mb-4 text-center">
@@ -167,15 +239,11 @@ export default function LoginPage() {
                 <p className="mt-2 text-sm text-slate-500">
                   Gunakan kredensial resmi untuk mengakses dasbor operasional
                 </p>
-                {errorKey === "auth_required" && errorMsg && (
-                  <p className="mt-3 text-xs font-semibold text-rose-500">
-                    {errorMsg}
-                  </p>
-                )}
-                {showGeneralError && (
-                  <p className="mt-3 text-xs font-semibold text-rose-500">
-                    {errorMsg}
-                  </p>
+                {(errorKey === "auth_required" || showGeneralError) && errorMsg && (
+                  <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-rose-100 bg-rose-50/90 px-4 py-2 text-xs font-semibold text-rose-600 shadow-[0_10px_30px_rgba(244,63,94,0.18)]" role="alert">
+                    <AlertTriangle className="h-4 w-4" />
+                    <span>{errorMsg}</span>
+                  </div>
                 )}
               </div>
 
@@ -202,10 +270,8 @@ export default function LoginPage() {
                   </button>
                 ))}
               </div>
-              {isRoleError && (
-                <p className="mt-2 text-xs font-semibold text-rose-600">
-                  {errorMsg}
-                </p>
+              {isRoleError && errorMsg && (
+                <InlineFieldError message={errorMsg} />
               )}
 
               <label className="mt-4 block text-sm font-medium text-slate-600" htmlFor="email">
@@ -213,7 +279,7 @@ export default function LoginPage() {
               </label>
               <div
                 className={`mt-2 flex items-center gap-3 rounded-2xl border bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200 ${
-                  isEmailError ? "border-rose-400 bg-rose-50" : "border-slate-200"
+                  hasEmailError ? "border-rose-400 bg-rose-50 shadow-[0_15px_40px_rgba(244,63,94,0.15)]" : "border-slate-200"
                 }`}
               >
                 <Mail className="h-5 w-5 text-slate-400" />
@@ -227,8 +293,8 @@ export default function LoginPage() {
                   onChange={(e) => setEmailInput(e.target.value)}
                 />
               </div>
-              {isEmailError && (
-                <p className="mt-1 text-xs font-semibold text-rose-600">{errorMsg}</p>
+              {hasEmailError && emailErrorMessage && (
+                <InlineFieldError message={emailErrorMessage} />
               )}
 
               <label className="mt-4 block text-sm font-medium text-slate-600" htmlFor="password">
@@ -236,7 +302,7 @@ export default function LoginPage() {
               </label>
               <div
                 className={`mt-2 flex items-center gap-3 rounded-2xl border bg-white px-4 py-3 focus-within:ring-2 focus-within:ring-indigo-200 ${
-                  isPasswordError ? "border-rose-400 bg-rose-50" : "border-slate-200"
+                  hasPasswordError ? "border-rose-400 bg-rose-50 shadow-[0_15px_40px_rgba(244,63,94,0.15)]" : "border-slate-200"
                 }`}
               >
                 <Lock className="h-5 w-5 text-slate-400" />
@@ -246,10 +312,12 @@ export default function LoginPage() {
                   name="password"
                   placeholder="Masukkan password"
                   className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+                  value={passwordInput}
+                  onChange={(e) => setPasswordInput(e.target.value)}
                 />
               </div>
-              {isPasswordError && (
-                <p className="mt-1 text-xs font-semibold text-rose-600">{errorMsg}</p>
+              {hasPasswordError && passwordErrorMessage && (
+                <InlineFieldError message={passwordErrorMessage} />
               )}
 
               {errorKey === "rate" && (
