@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
     return url;
   };
   const redirectToLogin = (error: string) =>
-    NextResponse.redirect(buildRedirect(error), { status: 303 });
+    NextResponse.redirect(buildRedirect(error), 302);
 
   if (!rawEmail && !password) {
     return redirectToLogin("credentials_empty");
@@ -97,9 +97,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (isBlocked(clientKey)) {
-    return NextResponse.redirect(new URL("/login?error=rate", req.url), {
-      status: 303,
-    });
+    return NextResponse.redirect(new URL("/login?error=rate", req.url), 302);
   }
 
   const { rows } = await query(
