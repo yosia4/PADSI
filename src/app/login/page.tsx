@@ -36,8 +36,12 @@ export default function LoginPage() {
   const [errorKey, setErrorKey] = useState<string | null>(
     searchParams.get("error")
   );
+  const [emailInput, setEmailInput] = useState(
+    searchParams.get("email") || ""
+  );
   useEffect(() => {
     setErrorKey(searchParams.get("error"));
+    setEmailInput(searchParams.get("email") || "");
   }, [searchParams]);
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const fieldErrorKeys = new Set([
@@ -219,6 +223,8 @@ export default function LoginPage() {
                   name="email"
                   placeholder="Masukan email"
                   className="w-full bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
                 />
               </div>
               {isEmailError && (

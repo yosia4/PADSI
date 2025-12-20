@@ -72,21 +72,26 @@ export async function POST(req: NextRequest) {
   const clientKey = getClientKey(req);
   const role = rawRole === "OWNER" || rawRole === "PEGAWAI" ? rawRole : null;
 
+  const buildRedirect = (error: string) => {
+    const url = new URL("/login", req.url);
+    url.searchParams.set("error", error);
+    if (rawEmail) {
+      url.searchParams.set("email", rawEmail);
+    }
+    return url;
+  };
+
   if (!rawEmail && !password) {
-    return NextResponse.redirect(
-      new URL("/login?error=credentials_empty", req.url)
-    );
+    return NextResponse.redirect(buildRedirect("credentials_empty"));
   }
   if (!rawEmail) {
-    return NextResponse.redirect(new URL("/login?error=email_empty", req.url));
+    return NextResponse.redirect(buildRedirect("email_empty"));
   }
   if (!password) {
-    return NextResponse.redirect(
-      new URL("/login?error=password_empty", req.url)
-    );
+    return NextResponse.redirect(buildRedirect("password_empty"));
   }
   if (!role) {
-    return NextResponse.redirect(new URL("/login?error=role_invalid", req.url));
+    return NextResponse.redirect(buildRedirect("role_invalid"));
   }
 
   if (isBlocked(clientKey)) {
@@ -101,17 +106,17 @@ export async function POST(req: NextRequest) {
 
   if (!user) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(new URL("/login?error=email_invalid", req.url));
+    return NextResponse.redirect(buildRedirect("email_invalid"));
   }
 
   if (user.role !== role) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(new URL("/login?error=role_invalid", req.url));
+    return NextResponse.redirect(buildRedirect("role_invalid"));
   }
 
   if (!verifyPassword(password, user.password)) {
     recordFailedAttempt(clientKey);
-    return NextResponse.redirect(new URL("/login?error=password_invalid", req.url));
+    return NextResponse.redirect(buildRedirect("password_invalid"));
   }
 
   // upgrade hash jika masih plaintext
