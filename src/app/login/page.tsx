@@ -60,10 +60,11 @@ export default function LoginPage() {
   const [localErrors, setLocalErrors] = useState<FieldErrors>({});
   const year = useMemo(() => new Date().getFullYear(), []);
   const searchParams = useSearchParams();
-  const [emailInput, setEmailInput] = useState(
-    searchParams.get("email") || ""
-  );
-  const errorKey = searchParams.get("error");
+  const initialEmail = searchParams.get("email") || "";
+  const initialError = searchParams.get("error");
+  const [emailInput, setEmailInput] = useState(initialEmail);
+  const [errorKey, setErrorKey] = useState<string | null>(initialError);
+  const querySignature = searchParams.toString();
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const fieldErrorKeys = new Set([
     "email_empty",
@@ -77,14 +78,15 @@ export default function LoginPage() {
     errorKey &&
     !fieldErrorKeys.has(errorKey as keyof typeof errorMessages);
   const isRoleError = errorKey === "role_invalid";
-  const emailQueryValue = searchParams.get("email") || "";
-
   useEffect(() => {
-    setEmailInput(emailQueryValue);
+    const nextEmail = searchParams.get("email") || "";
+    const nextError = searchParams.get("error");
+    setEmailInput(nextEmail);
+    setErrorKey(nextError);
     setPasswordInput("");
     setLocalErrors({});
     setSubmitting(false);
-  }, [emailQueryValue, errorKey]);
+  }, [querySignature]);
 
   const serverEmailMessage = (() => {
     if (!errorKey) return null;
