@@ -33,7 +33,15 @@ type LaporanData = {
   redeemBulanan: Array<{ bulan: string; total: number }>;
 };
 
-export default function LaporanClient({ data }: { data: LaporanData }) {
+export default function LaporanClient({
+  data,
+  dataEmpty = false,
+  loadError,
+}: {
+  data: LaporanData;
+  dataEmpty?: boolean;
+  loadError?: string;
+}) {
   const [isPrinting, setIsPrinting] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [chartReady, setChartReady] = useState(false);
@@ -223,6 +231,24 @@ export default function LaporanClient({ data }: { data: LaporanData }) {
             </button>
           </div>
         </div>
+
+        {loadError && (
+          <div
+            className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-semibold text-rose-600"
+            data-cy="laporan-error"
+          >
+            {loadError}
+          </div>
+        )}
+
+        {dataEmpty && !loadError && (
+          <div
+            className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700"
+            data-cy="laporan-empty-warning"
+          >
+            Belum ada data yang tersedia.
+          </div>
+        )}
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
           <Card icon={<Users size={26} />} title="Total Pelanggan" value={data.pelanggan} accent="rose" />

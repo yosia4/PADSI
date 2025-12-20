@@ -90,6 +90,15 @@ export default async function RewardPage(props: {
   ];
 
   const prefCustomerId = sp?.customer_id || "";
+  let selectedCustomer: { id: number; name: string; points: number } | null =
+    null;
+  if (prefCustomerId) {
+    const { rows } = await query(
+      "SELECT id, name, points FROM customers WHERE id=$1 LIMIT 1",
+      [prefCustomerId]
+    );
+    selectedCustomer = (rows as any)[0] || null;
+  }
 
   return (
     <Shell>
@@ -113,17 +122,63 @@ export default async function RewardPage(props: {
       </div>
 
       {prefCustomerId ? (
-        <div className="mb-6 grid gap-4 sm:grid-cols-2">
-          {presetList.map((preset) => (
-            <RewardPresetCard
-              key={preset.key}
-              preset={{
-                ...preset,
-                customerId: prefCustomerId,
-              }}
-            />
-          ))}
-        </div>
+        selectedCustomer ? (
+          <>
+            <div
+              className="mb-4 rounded-2xl border border-indigo-100 bg-white/90 p-4 shadow-sm"
+              data-cy="reward-customer-summary"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] text-indigo-500">
+                Pelanggan Terpilih
+              </p>
+              <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {selectedCustomer.name}
+                  </h2>
+                  <p className="text-xs text-gray-500">
+                    ID #{String(selectedCustomer.id).padStart(3, "0")}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-400">
+                    Total Poin
+                  </p>
+                  <p
+                    className="text-3xl font-bold text-indigo-600"
+                    data-cy="reward-customer-points"
+                  >
+                    {Number(selectedCustomer.points || 0).toLocaleString("id-ID")} pts
+                  </p>
+                  {Number(selectedCustomer.points || 0) <= 0 && (
+                    <p
+                      className="mt-1 text-xs font-semibold text-rose-600"
+                      data-cy="reward-no-points"
+                    >
+                      Belum ada poin yang dimiliki.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-6 grid gap-4 sm:grid-cols-2">
+              {presetList.map((preset) => (
+                <RewardPresetCard
+                  key={preset.key}
+                  preset={{
+                    ...preset,
+                    customerId: prefCustomerId,
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="mb-6 rounded-xl border border-rose-200 bg-white/80 p-6 text-sm text-rose-600">
+            Data pelanggan tidak ditemukan. Periksa kembali data yang dipilih.
+          </div>
+        )
       ) : (
         <div className="mb-6 rounded-xl border border-dashed border-rose-200 bg-white/80 p-6 text-sm text-gray-600">
           Pilih pelanggan dari halaman pelanggan lalu klik tombol

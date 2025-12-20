@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (type === "REDEEM" && Number(customer.points || 0) < points) {
-    return buildErrorResponse(req, "Poin pelanggan tidak mencukupi untuk hadiah ini.", "points_insufficient");
+    return buildErrorResponse(req, "Poin tidak cukup untuk reward ini.", "points_insufficient");
   }
 
   const { rows: inserted } = await query(

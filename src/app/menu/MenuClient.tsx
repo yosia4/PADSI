@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Edit, Trash2, Star } from "lucide-react";
 import AppDialog from "@/components/AppDialog";
 import { useToast } from "@/components/ToastProvider";
@@ -14,6 +14,7 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [pendingDelete, setPendingDelete] = useState<{ id: number; name?: string } | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const showToast = useToast();
 
   // Tambah menu baru
@@ -21,16 +22,34 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
     e.preventDefault();
     const form = e.currentTarget;
     setStatus(null);
+    setFormError(null);
     setIsSubmitting(true);
+
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") || "").trim(),
+      price: Number(formData.get("price") || 0),
+    };
+    if (!payload.name || !Number.isFinite(payload.price) || payload.price <= 0) {
+      const message = "Data belum lengkap.";
+      setFormError(message);
+      setStatus({ type: "error", message });
+      showToast({ type: "error", message });
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/menus", {
         method: "POST",
-        body: new FormData(form),
+        body: formData,
         headers: { "x-requested-with": "fetch" },
       });
 
-      if (!res.ok) throw new Error("Gagal menambah menu");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Gagal menambah menu");
+      }
       form.reset();
       const updated = await fetch("/api/menus").then((r) => r.json());
       setMenus(updated);
@@ -40,6 +59,9 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
       const message = err.message || "Terjadi kesalahan.";
       setStatus({ type: "error", message });
       showToast({ type: "error", message });
+      if (message === "Data belum lengkap.") {
+        setFormError(message);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -80,6 +102,12 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
   const filtered = menus.filter((m) =>
     m.name.toLowerCase().includes(search.toLowerCase())
   );
+  const emptyMessage = useMemo(() => {
+    if (menus.length === 0) {
+      return "Belum ada menu favorit yang tersimpan.";
+    }
+    return "Menu favorit tidak ditemukan.";
+  }, [menus.length]);
 
   return (
     <>
@@ -90,6 +118,7 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
 
       {status && (
         <div
+          data-cy="menu-status"
           className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${
             status.type === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -103,25 +132,27 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
       {/* === Tambah dan Cari === */}
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <form
+          data-cy="menu-form"
           onSubmit={handleAddMenu}
           className="flex flex-wrap items-center gap-2 bg-white p-4 rounded-lg shadow-sm border border-gray-200"
         >
           <input
             name="name"
             placeholder="Nama Menu"
+            data-cy="menu-input-name"
             className="border rounded p-2 text-sm"
-            required
           />
           <input
             name="price"
             placeholder="Harga"
             type="number"
+            data-cy="menu-input-price"
             className="border rounded p-2 text-sm w-28"
-            required
           />
           <input
             name="image_url"
             placeholder="URL Gambar"
+            data-cy="menu-input-image"
             className="border rounded p-2 text-sm w-60"
           />
           <select
@@ -140,6 +171,11 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
             {isSubmitting ? "Menyimpan..." : "Tambah"}
           </button>
         </form>
+        {formError && (
+          <p className="text-xs text-red-500" data-cy="menu-form-error">
+            {formError}
+          </p>
+        )}
 
         <div className="flex items-center gap-2 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <span className="text-sm text-gray-700">Cari</span>
@@ -195,6 +231,8 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
               ));
               return (
               <div
+                data-cy="menu-card"
+                data-menu-name={menu.name}
                 key={menu.id}
                 className="bg-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-transform overflow-hidden border border-gray-100 flex flex-col animate-pop"
               >
@@ -220,6 +258,7 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
 
                   <div className="flex justify-center gap-3 mt-4">
                     <a
+                      data-cy="menu-edit"
                       href={`/menu/edit/${menu.id}`}
                       title="Edit"
                       className="p-2 rounded bg-blue-500 hover:bg-blue-600 text-white"
@@ -227,6 +266,8 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
                       <Edit size={16} />
                     </a>
                     <button
+                      type="button"
+                      data-cy="menu-delete"
                       onClick={() => setPendingDelete({ id: menu.id, name: menu.name })}
                       title="Hapus"
                       disabled={deletingId === menu.id}
@@ -242,7 +283,7 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
 
             {filtered.length === 0 && (
               <div className="col-span-full text-center text-gray-500">
-                Menu tidak ditemukan.
+                {emptyMessage}
               </div>
             )}
           </div>

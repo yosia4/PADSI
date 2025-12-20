@@ -31,6 +31,15 @@ export async function POST(
     let rating = ratingRaw ? Number(ratingRaw) : 4;
     if (!Number.isFinite(rating) || rating < 1 || rating > 5) rating = 4;
 
+    if (!name || !Number.isFinite(price) || price <= 0) {
+      const message = "Data belum lengkap.";
+      if (expectsJson(req)) {
+        return NextResponse.json({ error: message }, { status: 400 });
+      }
+      const redirectUrl = new URL("/menu?error=incomplete", req.url);
+      return NextResponse.redirect(redirectUrl);
+    }
+
     await query(
       "UPDATE menus SET name = $1, price = $2, image_url = $3, rating = $4 WHERE id = $5",
       [name, price, image_url, rating, id]

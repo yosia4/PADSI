@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import AppDialog from "./AppDialog";
 
 type Preset = {
   key: string;
@@ -20,6 +21,7 @@ export default function RewardPresetCard({
     message: string;
   } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   async function handleRedeem() {
     setIsSubmitting(true);
@@ -52,6 +54,7 @@ export default function RewardPresetCard({
       });
     } finally {
       setIsSubmitting(false);
+      setConfirmOpen(false);
     }
   }
 
@@ -67,7 +70,7 @@ export default function RewardPresetCard({
         </p>
       </div>
       <button
-        onClick={handleRedeem}
+        onClick={() => setConfirmOpen(true)}
         disabled={isSubmitting}
         className="inline-flex items-center justify-center rounded-full bg-rose-500 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-600 transition disabled:cursor-not-allowed disabled:opacity-60"
       >
@@ -82,6 +85,17 @@ export default function RewardPresetCard({
           {status.message}
         </p>
       )}
+
+      <AppDialog
+        open={confirmOpen}
+        title="Konfirmasi Tukar Reward"
+        description={`Tukar ${preset.points} poin untuk ${preset.label.toLowerCase()}?`}
+        confirmText="Tukar"
+        cancelText="Batal"
+        tone="info"
+        onConfirm={handleRedeem}
+        onCancel={() => setConfirmOpen(false)}
+      />
     </div>
   );
 }

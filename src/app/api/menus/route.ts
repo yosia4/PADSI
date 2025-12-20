@@ -17,6 +17,15 @@ export async function POST(req: NextRequest) {
   let rating = ratingRaw ? Number(ratingRaw) : 4;
   if (!Number.isFinite(rating) || rating < 1 || rating > 5) rating = 4;
 
+  if (!name || !Number.isFinite(price) || price <= 0) {
+    const message = "Data belum lengkap.";
+    if (expectsJson(req)) {
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+    const redirectUrl = new URL("/menu?error=incomplete", req.url);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   const { rows } = await query(
     "INSERT INTO menus (name, price, image_url, rating, is_active) VALUES ($1, $2, $3, $4, true) RETURNING id, name, price, image_url, rating",
     [name, price, image_url, rating]

@@ -1,14 +1,56 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
 
+const expectsJson = (req: NextRequest) =>
+  req.headers.get("x-requested-with") === "fetch";
+
 export async function POST(req: NextRequest) {
   const form = await req.formData();
   const customer_id = Number(form.get("customer_id"));
   const total_spend = Number(form.get("total_spend"));
+  const isInvalid =
+    !Number.isFinite(customer_id) ||
+    !Number.isFinite(total_spend) ||
+    total_spend <= 0;
+  if (isInvalid) {
+    const message = "Data kunjungan tidak valid.";
+    if (expectsJson(req)) {
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+    const redirectUrl = new URL("/riwayat?error=invalid", req.url);
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  const { rows: customers } = await query(
+    "SELECT id FROM customers WHERE id=$1",
+    [customer_id]
+  );
+  if (customers.length === 0) {
+    const message = "Data pelanggan tidak ditemukan.";
+    if (expectsJson(req)) {
+      return NextResponse.json({ error: message }, { status: 404 });
+    }
+    const redirectUrl = new URL("/riwayat?error=customer_missing", req.url);
+    return NextResponse.redirect(redirectUrl);
+  }
+
   const earned = Math.floor(total_spend / 1000);
-  await query("INSERT INTO visits (customer_id,total_spend,earned_pts) VALUES ($1,$2,$3)", [customer_id, total_spend, earned]);
-  await query("UPDATE customers SET total_visits = total_visits + 1, points = points + $1 WHERE id=$2", [earned, customer_id]);
-  await query("INSERT INTO rewards (customer_id,type,points,note) VALUES ($1,'EARN',$2,$3)", [customer_id, earned, "Poin otomatis dari kunjungan"]);
+  const { rows } = await query(
+    "INSERT INTO visits (customer_id,total_spend,earned_pts) VALUES ($1,$2,$3) RETURNING *",
+    [customer_id, total_spend, earned]
+  );
+  await query(
+    "UPDATE customers SET total_visits = total_visits + 1, points = points + $1 WHERE id=$2",
+    [earned, customer_id]
+  );
+  await query(
+    "INSERT INTO rewards (customer_id,type,points,note) VALUES ($1,'EARN',$2,$3)",
+    [customer_id, earned, "Poin otomatis dari kunjungan"]
+  );
+
+  if (expectsJson(req)) {
+    return NextResponse.json(rows[0]);
+  }
   return NextResponse.redirect(new URL("/riwayat", req.url));
 }
 
