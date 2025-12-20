@@ -155,11 +155,25 @@ export default function ShellClient({
             </button>
           </div>
         </div>
+        <div className="hidden items-center justify-end lg:flex">
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            className="flex items-center gap-2 rounded-2xl border border-white/60 bg-white/80 px-3 py-2 text-xs font-semibold text-gray-700 shadow-sm transition hover:-translate-y-0.5 hover:bg-white dark:border-white/10 dark:bg-white/10 dark:text-white"
+            aria-expanded={sidebarOpen}
+            aria-controls="app-sidebar"
+          >
+            {sidebarOpen ? <X size={16} /> : <Menu size={16} />}
+            {sidebarOpen ? "Sembunyikan menu" : "Tampilkan menu"}
+          </button>
+        </div>
         {/* Sidebar modern */}
         <aside
           id="app-sidebar"
-          className={`fixed inset-y-0 left-0 z-30 flex w-[85%] max-w-sm translate-x-0 flex-shrink-0 flex-col justify-between overflow-y-auto rounded-r-[36px] border border-white/60 bg-white/95 px-4 py-6 text-[11px] shadow-2xl backdrop-blur-2xl transition-transform duration-300 dark:border-white/10 dark:bg-[#111]/95 sm:w-80 sm:rounded-3xl sm:border-white/40 sm:bg-white lg:sticky lg:top-8 lg:z-auto lg:w-56 lg:overflow-visible lg:rounded-3xl lg:bg-white/90 lg:px-4 lg:py-4 lg:transition-none ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-[110%] lg:translate-x-0"
+          className={`fixed inset-y-0 left-0 z-30 flex w-[85%] max-w-sm translate-x-0 flex-shrink-0 flex-col justify-between overflow-y-auto rounded-r-[36px] border border-white/60 bg-white/95 px-4 py-6 text-[11px] shadow-2xl backdrop-blur-2xl transition-transform duration-300 dark:border-white/10 dark:bg-[#111]/95 sm:w-80 sm:rounded-3xl sm:border-white/40 sm:bg-white lg:sticky lg:top-8 lg:z-auto lg:w-56 lg:overflow-visible lg:rounded-3xl lg:bg-white/90 lg:px-4 lg:py-4 lg:transition-all ${
+            sidebarOpen
+              ? "translate-x-0 lg:translate-x-0 lg:opacity-100 lg:pointer-events-auto"
+              : "-translate-x-[110%] lg:-translate-x-[120%] lg:w-0 lg:px-0 lg:py-0 lg:opacity-0 lg:pointer-events-none"
           }`}
         >
           {/* Profil user */}
