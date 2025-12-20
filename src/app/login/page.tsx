@@ -38,8 +38,17 @@ export default function LoginPage() {
     setErrorKey(searchParams.get("error"));
   }, [searchParams]);
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
+  const fieldErrorKeys = new Set([
+    "email_empty",
+    "email_invalid",
+    "password_empty",
+    "password_invalid",
+    "credentials_empty",
+  ]);
   const showGeneralError =
-    errorMsg && errorKey && errorKey !== "auth_required";
+    errorMsg &&
+    errorKey &&
+    !fieldErrorKeys.has(errorKey as keyof typeof errorMessages);
   const isEmailError =
     errorKey === "email_empty" ||
     errorKey === "email_invalid" ||
