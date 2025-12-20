@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { BadgeCheck, Layers3, Lock, Mail, Phone, Sparkles, Workflow } from "lucide-react";
@@ -31,9 +31,12 @@ export default function LoginPage() {
   const [lookupResult, setLookupResult] = useState<LookupResult | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [errorKey, setErrorKey] = useState<string | null>(null);
   const year = useMemo(() => new Date().getFullYear(), []);
   const searchParams = useSearchParams();
-  const errorKey = searchParams.get("error");
+  useEffect(() => {
+    setErrorKey(searchParams.get("error"));
+  }, [searchParams]);
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const showGeneralError =
     errorMsg && errorKey && errorKey !== "auth_required";
