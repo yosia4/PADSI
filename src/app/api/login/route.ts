@@ -72,6 +72,11 @@ export async function POST(req: NextRequest) {
   const clientKey = getClientKey(req);
   const role = rawRole === "OWNER" || rawRole === "PEGAWAI" ? rawRole : null;
 
+  if (!rawEmail && !password) {
+    return NextResponse.redirect(
+      new URL("/login?error=credentials_empty", req.url)
+    );
+  }
   if (!rawEmail) {
     return NextResponse.redirect(new URL("/login?error=email_empty", req.url));
   }

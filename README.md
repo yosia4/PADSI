@@ -9,10 +9,11 @@ Test case berikut dirancang berdasarkan SKPL Bab 4.1.1 Use Case Spesification (A
 | ----- | ----- | ------ | ------------ | --------------------- |
 | TC_login-owner_positif | Positif | Owner berhasil login | Pilih peran Owner → masukkan email/password Owner valid → klik Masuk | Dialihkan ke `/dashboard` tanpa pesan error |
 | TC_login-pegawai_positif | Positif | Pegawai berhasil login sesuai hak akses | Pilih peran Pegawai → masukkan kredensial Pegawai valid → klik Masuk | Dialihkan ke `/dashboard` tanpa pesan error |
-| TC_login-email-tidak-terdaftar_negatif | Negatif | Menolak email yang tidak terdaftar | Pilih peran Owner → masukkan email tidak terdaftar + password valid → klik Masuk | Tetap di `/login` dengan query `error=email_invalid` dan pesan “Email tidak ditemukan.” |
-| TC_login-password-salah_negatif | Negatif | Menolak password salah | Pilih peran Pegawai → masukkan email Pegawai valid + password salah → klik Masuk | Tetap di `/login` dengan query `error=password_invalid` dan pesan “Password tidak sesuai.” |
+| TC_login-email-tidak-terdaftar_negatif | Negatif | Menolak email yang tidak terdaftar | Pilih peran Owner → masukkan email tidak terdaftar + password valid → klik Masuk | Tetap di `/login` dengan query `error=email_invalid` dan pesan “Akun tidak ditemukan.” |
+| TC_login-password-salah_negatif | Negatif | Menolak password salah | Pilih peran Pegawai → masukkan email Pegawai valid + password salah → klik Masuk | Tetap di `/login` dengan query `error=password_invalid` dan pesan “Password yang dimasukkan salah.” |
 | TC_login-email-kosong_negatif | Negatif | Validasi kolom email wajib isi | Pilih peran Owner → biarkan email kosong → isi password valid → klik Masuk | Tetap di `/login` dengan query `error=email_empty` dan pesan “Email wajib diisi.” |
 | TC_login-password-kosong_negatif | Negatif | Validasi kolom password wajib isi | Pilih peran Owner → isi email valid → biarkan password kosong → klik Masuk | Tetap di `/login` dengan query `error=password_empty` dan pesan “Password wajib diisi.” |
+| TC_login-email-dan-password-kosong_negatif | Negatif | Validasi peringatan SKPL saat form kosong | Pilih peran Owner → biarkan email dan password kosong → klik Masuk | Tetap di `/login` dengan query `error=credentials_empty` dan pesan “Email dan password belum diisi.” |
 
 ## Menjalankan Test Otomatis
 Di root proyek utama:

@@ -7,9 +7,10 @@ import { BadgeCheck, Layers3, Lock, Mail, Phone, Sparkles, Workflow } from "luci
 
 const errorMessages: Record<string, string> = {
   email_empty: "Email wajib diisi.",
-  email_invalid: "Email tidak ditemukan.",
+  email_invalid: "Akun tidak ditemukan.",
   password_empty: "Password wajib diisi.",
-  password_invalid: "Password tidak sesuai.",
+  password_invalid: "Password yang dimasukkan salah.",
+  credentials_empty: "Email dan password belum diisi.",
   role_invalid: "Role tidak sesuai dengan akun ini.",
   rate: "Terlalu banyak percobaan. Coba lagi beberapa menit.",
   auth_required: "Sesi Anda sudah berakhir. Silakan login kembali untuk melanjutkan.",
@@ -36,8 +37,14 @@ export default function LoginPage() {
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const showGeneralError =
     errorMsg && errorKey && errorKey !== "auth_required";
-  const isEmailError = errorKey === "email_empty" || errorKey === "email_invalid";
-  const isPasswordError = errorKey === "password_empty" || errorKey === "password_invalid";
+  const isEmailError =
+    errorKey === "email_empty" ||
+    errorKey === "email_invalid" ||
+    errorKey === "credentials_empty";
+  const isPasswordError =
+    errorKey === "password_empty" ||
+    errorKey === "password_invalid" ||
+    errorKey === "credentials_empty";
   const isRoleError = errorKey === "role_invalid";
 
   async function handlePointLookup(e: React.FormEvent<HTMLFormElement>) {
