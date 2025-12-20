@@ -87,19 +87,6 @@ export default function LoginPage() {
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {submitting && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 backdrop-blur">
-          <div className="relative flex h-48 w-48 flex-col items-center justify-center overflow-hidden rounded-[36px] border border-indigo-400/40 bg-gradient-to-br from-indigo-600 to-cyan-500 text-white shadow-[0_20px_60px_rgba(14,165,233,0.4)]">
-            <div className="absolute inset-0 animate-pulse bg-white/10" />
-            <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white/15">
-              <div className="absolute inset-2 rounded-full border-2 border-dashed border-white/40 animate-spin" />
-              <Lock className="h-8 w-8" />
-            </div>
-            <p className="relative mt-4 text-sm font-semibold tracking-[0.35em] uppercase">Memverifikasi</p>
-            <p className="relative text-xs text-white/80">Mengalihkan ke dasbor...</p>
-          </div>
-        </div>
-      )}
       <div className="absolute inset-0 opacity-70">
         <div className="absolute -top-32 -left-20 h-72 w-72 rounded-full bg-rose-500/30 blur-[160px]" />
         <div className="absolute bottom-10 right-[-6%] h-[420px] w-[420px] rounded-full bg-indigo-500/30 blur-[180px]" />
