@@ -68,7 +68,9 @@ export async function POST(req: NextRequest) {
   const rawEmail = String(form.get("email") || "").trim();
   const email = rawEmail.toLowerCase();
   const password = String(form.get("password") || "");
+  const rawRole = String(form.get("role") || "").trim().toUpperCase();
   const clientKey = getClientKey(req);
+  const role = rawRole === "OWNER" || rawRole === "PEGAWAI" ? rawRole : null;
 
   if (!rawEmail) {
     return NextResponse.redirect(new URL("/login?error=email_empty", req.url));
@@ -77,6 +79,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.redirect(
       new URL("/login?error=password_empty", req.url)
     );
+  }
+  if (!role) {
+    return NextResponse.redirect(new URL("/login?error=role_invalid", req.url));
   }
 
   if (isBlocked(clientKey)) {
@@ -89,10 +94,19 @@ export async function POST(req: NextRequest) {
   );
   const user = (rows as any)[0];
 
-  if (!user || !verifyPassword(password, user.password)) {
+  if (!user) {
     recordFailedAttempt(clientKey);
-    const err = !user ? "email_invalid" : "password_invalid";
-    return NextResponse.redirect(new URL(`/login?error=${err}`, req.url));
+    return NextResponse.redirect(new URL("/login?error=email_invalid", req.url));
+  }
+
+  if (user.role !== role) {
+    recordFailedAttempt(clientKey);
+    return NextResponse.redirect(new URL("/login?error=role_invalid", req.url));
+  }
+
+  if (!verifyPassword(password, user.password)) {
+    recordFailedAttempt(clientKey);
+    return NextResponse.redirect(new URL("/login?error=password_invalid", req.url));
   }
 
   // upgrade hash jika masih plaintext

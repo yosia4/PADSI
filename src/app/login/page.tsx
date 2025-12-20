@@ -10,6 +10,7 @@ const errorMessages: Record<string, string> = {
   email_invalid: "Email tidak ditemukan.",
   password_empty: "Password wajib diisi.",
   password_invalid: "Password tidak sesuai.",
+  role_invalid: "Role tidak sesuai dengan akun ini.",
   rate: "Terlalu banyak percobaan. Coba lagi beberapa menit.",
   auth_required: "Sesi Anda sudah berakhir. Silakan login kembali untuk melanjutkan.",
 };
@@ -35,6 +36,7 @@ export default function LoginPage() {
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
   const isEmailError = errorKey === "email_empty" || errorKey === "email_invalid";
   const isPasswordError = errorKey === "password_empty" || errorKey === "password_invalid";
+  const isRoleError = errorKey === "role_invalid";
 
   async function handlePointLookup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -180,6 +182,11 @@ export default function LoginPage() {
                   </button>
                 ))}
               </div>
+              {isRoleError && (
+                <p className="mt-2 text-xs font-semibold text-rose-600">
+                  {errorMsg}
+                </p>
+              )}
 
               <label className="mt-4 block text-sm font-medium text-slate-600" htmlFor="email">
                 Email
