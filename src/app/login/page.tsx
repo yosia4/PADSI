@@ -34,6 +34,8 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const errorKey = searchParams.get("error");
   const errorMsg = errorKey ? errorMessages[errorKey] : null;
+  const showGeneralError =
+    errorMsg && errorKey && errorKey !== "auth_required";
   const isEmailError = errorKey === "email_empty" || errorKey === "email_invalid";
   const isPasswordError = errorKey === "password_empty" || errorKey === "password_invalid";
   const isRoleError = errorKey === "role_invalid";
@@ -154,6 +156,11 @@ export default function LoginPage() {
                   Gunakan kredensial resmi untuk mengakses dasbor operasional
                 </p>
                 {errorKey === "auth_required" && errorMsg && (
+                  <p className="mt-3 text-xs font-semibold text-rose-500">
+                    {errorMsg}
+                  </p>
+                )}
+                {showGeneralError && (
                   <p className="mt-3 text-xs font-semibold text-rose-500">
                     {errorMsg}
                   </p>
