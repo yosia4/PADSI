@@ -48,7 +48,9 @@ export async function POST(
     if (expectsJson(req)) {
       return NextResponse.json({ success: true });
     }
-    return NextResponse.redirect(new URL("/menu", req.url));
+    const redirectUrl = new URL("/menu", req.url);
+    redirectUrl.searchParams.set("status", "updated");
+    return NextResponse.redirect(redirectUrl);
   }
 
   return NextResponse.json({ error: "Metode tidak didukung" }, { status: 400 });

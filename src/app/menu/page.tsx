@@ -6,7 +6,20 @@ import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-export default async function MenuPage() {
+type MenuSearchParams = Record<string, string | string[] | undefined>;
+
+export default async function MenuPage(props: {
+  searchParams?: Promise<MenuSearchParams>;
+}) {
+  const searchParams = props?.searchParams ? await props.searchParams : {};
+  const statusParam = Array.isArray(searchParams.status)
+    ? searchParams.status[0]
+    : searchParams.status;
+  const initialFlash =
+    statusParam === "updated"
+      ? { type: "success", message: "Menu berhasil diperbarui." }
+      : null;
+
   // dY"' Cek role user (OWNER / PEGAWAI)
   const can = await requireRole(["OWNER", "PEGAWAI"]);
   if (!can.ok) redirect("/login");
@@ -22,7 +35,7 @@ export default async function MenuPage() {
 
   return (
     <Shell>
-      <MenuClient initialMenus={menus} />
+      <MenuClient initialMenus={menus} initialFlash={initialFlash} />
     </Shell>
   );
 }

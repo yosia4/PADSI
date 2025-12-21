@@ -1,21 +1,33 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Edit, Trash2, Star } from "lucide-react";
 import AppDialog from "@/components/AppDialog";
 import { useToast } from "@/components/ToastProvider";
 
 type Status = { type: "success" | "error"; message: string } | null;
 
-export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
+export default function MenuClient({
+  initialMenus,
+  initialFlash = null,
+}: {
+  initialMenus: any[];
+  initialFlash?: Status;
+}) {
   const [menus, setMenus] = useState(initialMenus);
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<Status>(null);
+  const [status, setStatus] = useState<Status>(initialFlash || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [pendingDelete, setPendingDelete] = useState<{ id: number; name?: string } | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const showToast = useToast();
+
+  useEffect(() => {
+    if (initialFlash) {
+      showToast(initialFlash);
+    }
+  }, [initialFlash, showToast]);
 
   // Tambah menu baru
   async function handleAddMenu(e: React.FormEvent<HTMLFormElement>) {
@@ -97,6 +109,13 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
     const { id } = pendingDelete;
     setPendingDelete(null);
     void deleteMenu(id);
+  };
+
+  const cancelDeleteMenu = () => {
+    setPendingDelete(null);
+    const message = "Penghapusan dibatalkan.";
+    setStatus({ type: "success", message });
+    showToast({ type: "success", message });
   };
 
   const filtered = menus.filter((m) =>
@@ -300,7 +319,7 @@ export default function MenuClient({ initialMenus }: { initialMenus: any[] }) {
         tone="danger"
         icon={<Trash2 size={22} />}
         onConfirm={confirmDeleteMenu}
-        onCancel={() => setPendingDelete(null)}
+        onCancel={cancelDeleteMenu}
       />
     </>
   );

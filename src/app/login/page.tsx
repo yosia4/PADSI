@@ -365,6 +365,7 @@ export default function LoginPage() {
                     placeholder="Masukkan nomor telepon pelanggan"
                     className="w-full bg-transparent text-sm text-amber-900 placeholder:text-amber-400 focus:outline-none"
                     value={lookupPhone}
+                    data-cy="point-lookup-phone-input"
                     onChange={(e) => setLookupPhone(e.target.value)}
                   />
                 </div>
@@ -372,19 +373,26 @@ export default function LoginPage() {
                   type="submit"
                   disabled={lookupLoading}
                   className="w-full rounded-2xl bg-amber-500 py-3 text-center text-sm font-semibold uppercase tracking-[0.25em] text-white shadow-lg shadow-amber-500/40 transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-70"
+                  data-cy="point-lookup-submit"
                 >
                   {lookupLoading ? "Mencari..." : "Lihat Poin"}
                 </button>
               </form>
 
               {lookupError && (
-                <p className="mt-3 text-center text-xs font-medium text-rose-600">
+                <p
+                  className="mt-3 text-center text-xs font-medium text-rose-600"
+                  data-cy="point-lookup-error"
+                >
                   {lookupError}
                 </p>
               )}
 
               {lookupResult && (
-                <div className="mt-4 rounded-2xl border border-white/60 bg-white/80 p-4 text-sm text-amber-900 shadow-inner">
+                <div
+                  className="mt-4 rounded-2xl border border-white/60 bg-white/80 p-4 text-sm text-amber-900 shadow-inner"
+                  data-cy="point-lookup-result"
+                >
                   <p className="text-base font-semibold">{lookupResult.name}</p>
                   <p className="text-xs text-amber-500">
                     {lookupResult.phone || "Nomor tidak tersedia"}
@@ -392,7 +400,10 @@ export default function LoginPage() {
                   <div className="mt-3 flex items-center justify-between bg-amber-50/60 rounded-2xl px-4 py-3">
                     <div>
                       <p className="text-[11px] uppercase tracking-[0.35em] text-amber-400">Poin</p>
-                      <p className="text-2xl font-bold text-amber-600">
+                      <p
+                        className="text-2xl font-bold text-amber-600"
+                        data-cy="point-lookup-points"
+                      >
                         {Number(lookupResult.points || 0).toLocaleString("id-ID")}
                       </p>
                     </div>
@@ -400,7 +411,10 @@ export default function LoginPage() {
                       <p className="text-[11px] uppercase tracking-[0.35em] text-amber-400">
                         Kunjungan
                       </p>
-                      <p className="text-xl font-semibold">
+                      <p
+                        className="text-xl font-semibold"
+                        data-cy="point-lookup-visits"
+                      >
                         {Number(lookupResult.total_visits || 0).toLocaleString("id-ID")}x
                       </p>
                     </div>

@@ -23,10 +23,13 @@ type VisitsResponse = {
   perPage: number;
 };
 
+type Status = { type: "success" | "error"; message: string } | null;
+
 export default function VisitsPanel({ initialData }: { initialData: VisitsResponse }) {
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState<Status>(null);
   const perPage = initialData.perPage;
   const key = useMemo(() => `/api/visits?q=${encodeURIComponent(query)}&page=${page}&perPage=${perPage}`, [query, page, perPage]);
   const { data, isLoading, mutate } = useSWR<VisitsResponse>(key, jsonFetcher, {
@@ -69,6 +72,19 @@ export default function VisitsPanel({ initialData }: { initialData: VisitsRespon
           </button>
         </form>
       </div>
+
+      {status && (
+        <div
+          data-cy="visits-status"
+          className={`mb-4 rounded-2xl border px-4 py-3 text-sm ${
+            status.type === "success"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+              : "border-rose-200 bg-rose-50 text-rose-700"
+          }`}
+        >
+          {status.message}
+        </div>
+      )}
 
       <div className="rounded-2xl border border-white/60 bg-gradient-to-br from-white to-rose-50 shadow-lg transition-colors dark:border-white/10 dark:from-[#101010] dark:to-[#181818] dark:shadow-black/60 glow-panel animate-pop">
         <div className="flex items-center gap-3 border-b border-white/70 bg-white/60 px-6 py-4 backdrop-blur dark:border-white/10 dark:bg-white/5">
@@ -167,7 +183,16 @@ export default function VisitsPanel({ initialData }: { initialData: VisitsRespon
                       </span>
                     </td>
                     <td className="sticky right-0 bg-white/90 text-center dark:bg-black/40">
-                      <VisitDeleteButton visitId={v.id} onDeleted={() => mutate()} />
+                      <VisitDeleteButton
+                        visitId={v.id}
+                        onDeleted={() => {
+                          setStatus({
+                            type: "success",
+                            message: "Riwayat kunjungan terhapus.",
+                          });
+                          mutate();
+                        }}
+                      />
                     </td>
                   </tr>
                 );
