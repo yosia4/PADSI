@@ -18,9 +18,9 @@ export default async function MenuPage(props: {
   const initialFlash =
     statusParam === "updated"
       ? ({
-          type: "success",
+          type: "success" as const,
           message: "Menu berhasil diperbarui.",
-        } as const)
+        })
       : null;
 
   // dY"' Cek role user (OWNER / PEGAWAI)
