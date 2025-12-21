@@ -17,7 +17,10 @@ export default async function MenuPage(props: {
     : searchParams.status;
   const initialFlash =
     statusParam === "updated"
-      ? { type: "success", message: "Menu berhasil diperbarui." }
+      ? ({
+          type: "success",
+          message: "Menu berhasil diperbarui.",
+        } as const)
       : null;
 
   // dY"' Cek role user (OWNER / PEGAWAI)
